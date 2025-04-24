@@ -7,7 +7,7 @@ export default function Project(){
     return(
         <>
             <h1 className="text-2xl md:text-3xl font-bold mb-32 mt-24">My Project:</h1>
-        <div className="grid md:grid-cols-2 gap-20 mb-32">
+        <div className="grid  sm:grid-cols-2 gap-20 mb-32">
 
             <ProjectCard/>
             <ProjectCard/>
