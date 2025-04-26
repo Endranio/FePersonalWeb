@@ -28,10 +28,18 @@ export default function TechCard() {
         <Swiper
           modules={[Autoplay]}
           spaceBetween={20}
-          slidesPerView={7}
+          
           loop
           speed={9000}
           autoplay={{ delay: 0, disableOnInteraction: false }}
+          breakpoints={{
+            320: { slidesPerView: 2 },
+            480: { slidesPerView: 3 },
+            640: { slidesPerView: 4 },
+            768: { slidesPerView: 5 },
+            1024: { slidesPerView: 6 },
+            1280: { slidesPerView: 7 },
+          }}
         >
           {Icon.map((icons, index) => (
             <SwiperSlide key={index}>

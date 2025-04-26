@@ -6,10 +6,16 @@ import TechStack from "./components/tech-stack/tech-stack";
 import WorkExperience from "./components/work-ex/work-ex";
 import Project from "./components/project/project";
 import Footer from "./components/footer/footer";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 export default function Home() {
+
+ 
+
   return (
-    <div className="">
+  
+    <div className=" relative">
+
       <div className="sticky top-0 bg-white z-50 dark:bg-gray-950  w-screen">
         <Navbar />
       </div>
@@ -21,5 +27,6 @@ export default function Home() {
       </div>
         <Footer />
     </div>
+
   );
 }
