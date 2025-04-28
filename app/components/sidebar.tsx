@@ -13,7 +13,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { scroll } from "./navbar"
-
+import { Button } from "@/components/ui/button"
+import { RxCross1 } from "react-icons/rx";
 
 
 
@@ -25,12 +26,16 @@ export function AppSidebar() {
     <Sidebar side="right">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel className="flex justify-end "><RxCross1/></SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-             <p onClick={()=>{scroll("tech-stack"),setOpenMobile(false)}} className="cursor-pointer hover:text-blue-400">Tech Stack</p>
-                     <p onClick={()=>{scroll("work-ex"),setOpenMobile(false)}} className="cursor-pointer hover:text-blue-400">Experients</p>
-                     <p onClick={()=>{scroll("project"),setOpenMobile(false)}} className="cursor-pointer hover:text-blue-400">Project</p>
+              <div className="flex flex-col gap-3">
+
+             <p onClick={()=>{scroll("tech-stack"),setOpenMobile(false)}} className="cursor-pointer hover:text-blue-400 text-lg">Tech Stack</p>
+                     <p onClick={()=>{scroll("work-ex"),setOpenMobile(false)}} className="cursor-pointer hover:text-blue-400 text-lg">Experients</p>
+                     <p onClick={()=>{scroll("project"),setOpenMobile(false)}} className="cursor-pointer hover:text-blue-400 text-lg">Project</p>
+                     <Button className="w-3/4 mx-auto rounded-full cursor-pointer">Download CV</Button>
+              </div>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

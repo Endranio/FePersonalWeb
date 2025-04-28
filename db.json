@@ -1,0 +1,54 @@
+
+{
+    "workEx": [
+        {
+            "image": "/logo1.png",
+            "position": "Fullstack Developer",
+            "company": "DumbWays Indonesia",
+            "jobDesk": [
+              "Develop and maintain web applications using Next.js and Node.js"
+            ],
+            "tech": ["Next.js", "Node.js", "TailwindCSS"],
+            "date": "2024 - Present"
+          },
+          {
+            "image": "/logo2.png",
+            "position": "Frontend Developer",
+            "company": "Tech Academy",
+            "jobDesk": [
+              "Build and maintain reusable React components",
+              "Integrate RESTful APIs and handle state management",
+              "Participate in code reviews and agile ceremonies"
+            ],
+            "tech": ["React.js", "Redux","TypeScript"],
+            "date": "2023 - 2024"
+          }
+    ],
+    "project": [
+      {
+        "image": "https://img.bytebloggerbase.com/uploads//1718693266020.jpg",
+        "title": "Task Management App",
+        "description": "A simple app to manage daily tasks with a focus on productivity and minimalism.",
+        "tech": ["React", "TypeScript", "Tailwind CSS", "Node.js"],
+        "isDemo": true,
+        "isPrivate": false
+      },
+      {
+        "image": "https://img.bytebloggerbase.com/uploads//1718693266020.jpg",
+        "title": "E-Commerce Platform",
+        "description": "An online store with shopping cart, payment integration, and admin dashboard.",
+        "tech": ["Next.js", "Express", "MongoDB", "Stripe API"],
+        "isDemo": false,
+        "isPrivate": true
+      },
+      {
+        "image": "https://img.bytebloggerbase.com/uploads//1718693266020.jpg",
+        "title": "Portfolio Website",
+        "description": "A personal portfolio website to showcase projects, blog posts, and contact information.",
+        "tech": ["Next.js", "Chakra UI", "TypeScript"],
+        "isDemo": true,
+        "isPrivate": false
+      }
+    ]
+   
+  }
