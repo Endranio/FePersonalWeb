@@ -131,3 +131,4 @@ body{
 body {
   @apply transition-colors duration-300; /* Pastikan pakai Tailwind */
 }
+

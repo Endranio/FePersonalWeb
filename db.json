@@ -39,6 +39,7 @@
         "description": "An online store with shopping cart, payment integration, and admin dashboard.",
         "tech": ["Next.js", "Express", "MongoDB", "Stripe API"],
         "isDemo": false,
+
         "isPrivate": true
       },
       {

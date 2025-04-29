@@ -1,4 +1,4 @@
-import { ProjectDTO } from "@/app/types/type";
+import { ProjectDTO } from "@/types/type";
 import { Button } from "@/components/ui/button";
 
 import Link from "next/link";
@@ -32,25 +32,26 @@ export default function ProjectCard(project: ProjectDTO) {
           ) : (
             <p className="text-sm flex gap-1 items-center text-blue-500">
               <FaGithub className="w-4 h-4" />
-              View Repository
+              View On Repository
             </p>
           )}
-            {project.isDemo? <Link
-            className="text-sm text-blue-500 flex gap-1 items-center"
-            href={"https://circle-kappa-two.vercel.app/"}
-          >
-            <FaExternalLinkAlt className="w-4 h-4" />
-            Live Demo
-          </Link>:<Link
-            className="text-sm flex gap-1 items-center"
-            href={"https://circle-kappa-two.vercel.app/"}
-          >
-            <FaExternalLinkAlt className="w-4 h-4" />
-            Demo Unavailale
-          </Link>
-          }
-         
-          
+          {project.isDemo ? (
+            <Link
+              className="text-sm text-blue-500 flex gap-1 items-center"
+              href={"https://circle-kappa-two.vercel.app/"}
+            >
+              <FaExternalLinkAlt className="w-4 h-4" />
+              Live Demo
+            </Link>
+          ) : (
+            <Link
+              className="text-sm flex gap-1 items-center"
+              href={"https://circle-kappa-two.vercel.app/"}
+            >
+              <FaExternalLinkAlt className="w-4 h-4" />
+              Demo Unavailale
+            </Link>
+          )}
         </div>
       </div>
     </div>

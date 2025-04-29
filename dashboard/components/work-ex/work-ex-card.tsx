@@ -1,4 +1,4 @@
-import { WorkExDTO } from "@/app/types/type";
+import { WorkExDTO } from "@/types/type";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
@@ -18,20 +18,20 @@ export default function WorkCard(work: WorkExDTO) {
           <p>{work.date}</p>
         </div>
 
-        
-          {work.jobDesk.map((Item, index) => (
-            <ul className="list-disc list-inside mt-3 space-y-2" key={index}>
-              <li>{Item}</li>
-            </ul>
-          ))}
-        
+        {work.jobDesk.map((Item, index) => (
+          <ul className="list-disc list-inside mt-3 space-y-2" key={index}>
+            <li>{Item}</li>
+          </ul>
+        ))}
 
-        <div className="flex gap-5 mt-5">
-          {work.tech.map((item,index)=>(
-
-          <Button key={index} className="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-transparent text-gray-600 dark:text-gray-400">
-            {item}
-          </Button>
+        <div className="flex flex-wrap gap-5 mt-5">
+          {work.tech.map((item, index) => (
+            <Button
+              key={index}
+              className="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-transparent text-gray-600 dark:text-gray-400"
+            >
+              {item}
+            </Button>
           ))}
         </div>
       </div>

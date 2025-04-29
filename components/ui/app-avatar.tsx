@@ -6,7 +6,7 @@ export default function AppAvatar(){
 
         <Avatar>
         <AvatarImage src="" className="w-5 rounded-full"/>
-        <AvatarFallback>EP</AvatarFallback>
+        <AvatarFallback className="bg-black text-white p-2 font-bold rounded-lg">EP</AvatarFallback>
     </Avatar>
     )
 }
