@@ -14,45 +14,22 @@ import { FaRegTrashAlt } from "react-icons/fa"
     {
       no: "1",
       Tech: "React",
-      totalAmount: "$250.00",
-      paymentMethod: "Credit Card",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/640px-Unofficial_JavaScript_logo_2.svg.png",
+      
     },
     {
       no: "2",
       Tech: "Typescript",
-      totalAmount: "$150.00",
-      paymentMethod: "PayPal",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Typescript.svg/1200px-Typescript.svg.png",
+      
     },
     {
       no: "3",
       Tech: "Javascript",
-      totalAmount: "$350.00",
-      paymentMethod: "Bank Transfer",
+      image: "https://www.rapiddg.com/sites/default/files/imce-files/react.png",
+      
     },
-    {
-      no: "4",
-      Tech: "Prisma",
-      totalAmount: "$450.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      no: "5",
-      Tech: "Postgre",
-      totalAmount: "$550.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      no: "6",
-      Tech: "Pending",
-      totalAmount: "$200.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      no: "7",
-      Tech: "Tailwind",
-      totalAmount: "$300.00",
-      paymentMethod: "Credit Card",
-    },
+   
   ]
   
   export function TableTech() {
@@ -70,9 +47,9 @@ import { FaRegTrashAlt } from "react-icons/fa"
           {invoices.map((invoice) => (
             <TableRow key={invoice.no}>
               <TableCell className="font-medium">{invoice.no}</TableCell>
+              <TableCell><img className="w-10" src={invoice.image}/></TableCell>
               <TableCell>{invoice.Tech}</TableCell>
-              <TableCell>{invoice.Tech}</TableCell>
-              <TableCell className="flex justify-end mr-3"><FaRegTrashAlt /></TableCell>
+              <TableCell className="flex justify-end my-2 mr-3"><FaRegTrashAlt /></TableCell>
             </TableRow>
           ))}
         </TableBody>
