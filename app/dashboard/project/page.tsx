@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ModalAddProject } from "@/components/ui/modal-add-project";
 import { TableProject } from "@/components/ui/table-project";
 
 export default function Project(){
@@ -9,7 +10,10 @@ return(
         <h1 className="font-bold">Project</h1>
         <p className="text-[16px]">Manage your project</p>
       </div>
-      <Button>+ Add Project</Button>
+      <ModalAddProject
+      trigger={<Button>+ Add Project</Button>}
+      />
+      
     </div>
 
     <div className="mt-10">

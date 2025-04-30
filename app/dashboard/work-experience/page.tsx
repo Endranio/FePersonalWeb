@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ModalAddExperience } from "@/components/ui/modal-experience";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { TableExperience } from "@/components/ui/table-experience";
 
@@ -11,7 +12,10 @@ export default function WorkExperience(){
         <h1 className="font-bold">Work Experience</h1>
             <p className="text-[16px]">manage your work experience</p>
             </div>
-            <Button>+ Add Work Experience</Button>
+            <ModalAddExperience
+            trigger={ <Button>+ Add Work Experience</Button>}
+            />
+           
             </div>
 
             <div>

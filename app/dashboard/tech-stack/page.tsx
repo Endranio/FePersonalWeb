@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ModalTech } from "@/components/ui/modal-add-tech";
 import { TableTech } from "@/components/ui/table-tech";
 
 export default function TechStack() {
@@ -9,7 +10,9 @@ export default function TechStack() {
           <h1 className="font-bold">TechStack</h1>
           <p className="text-[16px]">Manage your terchnologies</p>
         </div>
-        <Button>+ Add Technology</Button>
+        <ModalTech
+        trigger={<Button>+ Add Technology</Button>}
+        />
       </div>
 
       <div className="mt-10">
