@@ -4,7 +4,8 @@ export type WorkExDTO={
     company:string
     jobDesk:Array<string> 
     tech:Array<string>
-    date:string
+    startDate:string
+    endDate:string
 }
 
 export type ProjectDTO={
@@ -12,6 +13,24 @@ export type ProjectDTO={
     title:string
     description:string
     tech:Array<string>
+    linkGithub:string | ""
+    linkDemo:string | ""
     isDemo:boolean
-    isPrivate:boolean
+    isGithub:boolean
+}
+export type ProfileDTO={
+    image:string
+    headers: string
+    description:string
+    position:string
+    available:boolean
+    whatsapp:string
+    cv:string
+
+}
+
+export type TechStack={
+    tech:string
+    name:string
+
 }

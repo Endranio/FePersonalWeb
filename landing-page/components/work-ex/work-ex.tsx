@@ -2,7 +2,7 @@ import { WorkExDTO } from "@/types/type";
 import WorkCard from "./work-ex-card";
 
 export default async function WorkExperience() {
-  const res = await fetch("http://localhost:3001/workEx");
+  const res = await fetch("http://localhost:3001/work_experience");
   const data = await res.json();
 
   return (

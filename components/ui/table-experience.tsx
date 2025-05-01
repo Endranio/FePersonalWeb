@@ -10,6 +10,7 @@ import {
   } from "@/components/ui/table"
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa"
 import { Button } from "./button"
+import { ModalEditExperience } from "./modal-edit-experience"
   
   const invoices = [
     
@@ -90,7 +91,12 @@ import { Button } from "./button"
           ))}</TableCell>
               <TableCell className="truncate max-w-[20px]">{invoice.description}</TableCell>
               <TableCell>{invoice.duration}</TableCell>
-              <TableCell className="flex gap-3 text-right  my-2 mr-3"><FaRegTrashAlt /><FaRegEdit /></TableCell>
+              <TableCell className="flex gap-3 text-right  my-2 mr-3">
+                <ModalEditExperience
+                trigger={<FaRegEdit className="cursor-pointer" />}
+                />
+                <FaRegTrashAlt />
+                </TableCell>
               
             </TableRow>
           ))}

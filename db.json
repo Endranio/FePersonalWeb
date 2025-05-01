@@ -1,55 +1,99 @@
-
 {
-    "workEx": [
-        {
-            "image": "/logo1.png",
-            "position": "Fullstack Developer",
-            "company": "DumbWays Indonesia",
-            "jobDesk": [
-              "Develop and maintain web applications using Next.js and Node.js"
-            ],
-            "tech": ["Next.js", "Node.js", "TailwindCSS"],
-            "date": "2024 - Present"
-          },
-          {
-            "image": "/logo2.png",
-            "position": "Frontend Developer",
-            "company": "Tech Academy",
-            "jobDesk": [
-              "Build and maintain reusable React components",
-              "Integrate RESTful APIs and handle state management",
-              "Participate in code reviews and agile ceremonies"
-            ],
-            "tech": ["React.js", "Redux","TypeScript"],
-            "date": "2023 - 2024"
-          }
-    ],
-    "project": [
-      {
-        "image": "https://img.bytebloggerbase.com/uploads//1718693266020.jpg",
-        "title": "Task Management App",
-        "description": "A simple app to manage daily tasks with a focus on productivity and minimalism.",
-        "tech": ["React", "TypeScript", "Tailwind CSS", "Node.js"],
-        "isDemo": true,
-        "isPrivate": false
-      },
-      {
-        "image": "https://img.bytebloggerbase.com/uploads//1718693266020.jpg",
-        "title": "E-Commerce Platform",
-        "description": "An online store with shopping cart, payment integration, and admin dashboard.",
-        "tech": ["Next.js", "Express", "MongoDB", "Stripe API"],
-        "isDemo": false,
-
-        "isPrivate": true
-      },
-      {
-        "image": "https://img.bytebloggerbase.com/uploads//1718693266020.jpg",
-        "title": "Portfolio Website",
-        "description": "A personal portfolio website to showcase projects, blog posts, and contact information.",
-        "tech": ["Next.js", "Chakra UI", "TypeScript"],
-        "isDemo": true,
-        "isPrivate": false
-      }
-    ]
-   
-  }
+  "work_experience": [
+    {
+      "image": "https://upload.wikimedia.org/wikipedia/commons/4/44/Googleplex-Patio-Aug-2014.JPG",
+      "position": "Frontend Developer",
+      "company": "Google",
+      "jobDesk": [
+        "Developed user-facing features",
+        "Optimized web performance",
+        "Collaborated with designers"
+      ],
+      "tech": [
+        "React",
+        "TypeScript",
+        "Redux"
+      ],
+      "startDate": "2022-06-01",
+      "endDate": "Present"
+    },
+    {
+      "image": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg",
+      "position": "Software Engineer",
+      "company": "Amazon",
+      "jobDesk": [
+        "Built scalable APIs",
+        "Improved database queries",
+        "Worked with cross-functional teams"
+      ],
+      "tech": [
+        "Node.js",
+        "Express",
+        "PostgreSQL"
+      ],
+      "startDate": "2020-01-15",
+      "endDate": "2022-05-30"
+    }
+  ],
+  "projects": [
+    {
+      "image": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Placeholder_view_vector.svg",
+      "title": "Portfolio Website",
+      "description": "A personal portfolio to showcase my work and skills.",
+      "tech": [
+        "Next.js",
+        "Tailwind CSS",
+        "Vercel"
+      ],
+      "linkGithub": "https://github.com/example/portfolio",
+      "linkDemo": "https://example-portfolio.vercel.app",
+      "isDemo": true,
+      "isGithub": false
+    },
+    {
+      "image": "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
+      "title": "Task Manager App",
+      "description": "A fullstack task manager application.",
+      "tech": [
+        "React",
+        "Node.js",
+        "MongoDB"
+      ],
+      "linkGithub": "https://github.com/example/portfolio",
+      "linkDemo": "",
+      "isDemo": false,
+      "isGithub": true
+    }
+  ],
+  "profile": {
+    "image": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png",
+    "headers": "Hi, I'm a Fullstack Developer",
+    "description": "Passionate about building end-to-end web applications.",
+    "position": "Fullstack Developer",
+    "available": true,
+    "whatsapp": "+621234567890",
+    "cv": "https://example.com/cv.pdf"
+  },
+  "tech_stack": [
+    {
+      "tech": "https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg",
+      "name": "React"
+    },
+    {
+      "tech": "https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg",
+      "name": "Node.js"
+    },
+    {
+      "tech": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg",
+      "name": "TypeScript"
+    },
+    {
+      "tech": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Tailwind_CSS_Logo.svg",
+      "name": "Tailwind CSS"
+    },
+    {
+      "tech": "https://upload.wikimedia.org/wikipedia/commons/6/64/Expressjs.png",
+      "name": "Express.js"
+    }
+  ]
+}

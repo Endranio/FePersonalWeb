@@ -6,7 +6,7 @@ export default function WorkCard(work: WorkExDTO) {
   return (
     <div className="sm:flex gap-20 bg-white dark:bg-gray-800 p-10 rounded-xl mb-12 ">
       <div className="shrink-0 p-3">
-        <Image src="/logo.png" width={64} height={64} alt={"company"} />
+        <img src={work.image} width={100} height={100} alt={"company"} />
       </div>
 
       <div className="w-full">
@@ -15,7 +15,7 @@ export default function WorkCard(work: WorkExDTO) {
             <h1 className="font-bold text-3xl">{work.position}</h1>
             <p className="text-green-600">{work.company}</p>
           </div>
-          <p>{work.date}</p>
+          <p>{work.startDate} - {work.endDate}</p>
         </div>
 
         {work.jobDesk.map((Item, index) => (

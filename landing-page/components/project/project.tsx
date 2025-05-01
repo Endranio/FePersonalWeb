@@ -5,7 +5,7 @@ import { MdEmail } from "react-icons/md";
 import { ProjectDTO } from "@/types/type";
 
 export default async function Project() {
-  const res = await fetch("http://localhost:3001/project");
+  const res = await fetch("http://localhost:3001/projects");
   const data = await res.json();
   console.log(data);
 

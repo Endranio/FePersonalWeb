@@ -9,6 +9,7 @@ import {
 import { Input } from "./input";
 import { Label } from "./label";
 import { Button } from "./button";
+import { Textarea } from "./textarea";
 
 export default function CardEditProfile() {
   return (
@@ -29,26 +30,17 @@ export default function CardEditProfile() {
           </div>
         </div>
         <div className="flex gap-5 w-full">
-           <div className="w-1/2 mt-2 flex items-center gap-2">
-          <Input
-            id="available"
-            type="checkbox"
-            className="w-4 h-4 accent-blue-600"
-          />
-          <Label htmlFor="available" className="text-sm">
-            Available For New Project
-          </Label>
-        </div>
+           
           <div className="w-1/2 flex flex-col gap-2">
             <Label htmlFor="whatsapp">Whatsapp</Label>
             <Input id="whatsapp" placeholder="08123" />
           </div>
-        </div>
-
-        <div className=" flex flex-col gap-2">
+        <div className=" flex flex-col w-1/2 gap-2">
           <Label htmlFor="cv">Link Cv</Label>
           <Input id="cv" type="url" placeholder="cv" />
         </div>
+        </div>
+
 
         <div className="w-1/2 mt-2 flex items-center gap-2">
           <Input
@@ -62,8 +54,12 @@ export default function CardEditProfile() {
         </div>
 
         <div className=" flex flex-col gap-2">
+          <Label htmlFor="email">Email</Label>
+          <Input id="email" type="email" placeholder="endranio576@gmail.com" />
+        </div>
+        <div className=" flex flex-col gap-2">
           <Label htmlFor="description">Description</Label>
-          <Input id="description" type="" placeholder="Description" />
+          <Textarea id="description" className="h-25"  />
         </div>
         <div className=" flex flex-col gap-2">
           <Label htmlFor="profile">Profile Picture</Label>

@@ -10,6 +10,7 @@ import {
   } from "@/components/ui/table"
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa"
 import { Button } from "./button"
+import { ModalEditProject } from "./modal-edit-project"
   
   const invoices = [
     
@@ -89,7 +90,12 @@ import { Button } from "./button"
             
               <TableCell className="text-center">{invoice.github && "✔"} {!invoice.github && "❌"}</TableCell>
               <TableCell className="text-center">{invoice.demo && "✔"} {!invoice.demo && "❌"}</TableCell>
-              <TableCell className="flex gap-5 justify-end  my-2"><FaRegTrashAlt /><FaRegEdit /></TableCell>
+              <TableCell className="flex gap-5 justify-end  my-2"><FaRegTrashAlt />
+              <ModalEditProject
+              trigger={<FaRegEdit className="cursor-pointer" />}
+              />
+              
+              </TableCell>
               
             </TableRow>
           ))}

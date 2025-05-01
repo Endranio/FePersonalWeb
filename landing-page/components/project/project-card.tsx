@@ -24,29 +24,29 @@ export default function ProjectCard(project: ProjectDTO) {
           ))}
         </div>
         <div className="flex gap-5 mt-auto">
-          {project.isPrivate ? (
-            <p className="text-sm flex gap-1  items-center">
-              <FaGithub className="w-4 h-4" />
-              Private Repository
-            </p>
-          ) : (
-            <p className="text-sm flex gap-1 items-center text-blue-500">
+          {project.isGithub ? (
+            <Link href={project.linkGithub} className="text-sm flex gap-1 items-center text-blue-500">
               <FaGithub className="w-4 h-4" />
               View On Repository
+            </Link>
+          ) : (
+            <p className="text-sm flex gap-1 pointer-events-none items-center">
+              <FaGithub className="w-4 h-4 " />
+              Private Repository
             </p>
           )}
           {project.isDemo ? (
             <Link
               className="text-sm text-blue-500 flex gap-1 items-center"
-              href={"https://circle-kappa-two.vercel.app/"}
+              href={project.linkDemo}
             >
               <FaExternalLinkAlt className="w-4 h-4" />
               Live Demo
             </Link>
           ) : (
             <Link
-              className="text-sm flex gap-1 items-center"
-              href={"https://circle-kappa-two.vercel.app/"}
+              className="text-sm flex gap-1 items-center pointer-events-none"
+              href=""
             >
               <FaExternalLinkAlt className="w-4 h-4" />
               Demo Unavailale
