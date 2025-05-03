@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ReactNode } from "react"
+import { Textarea } from "./textarea"
 
 export function ModalEditExperience({ trigger }: { trigger: ReactNode }) {
   return (
@@ -36,7 +37,7 @@ export function ModalEditExperience({ trigger }: { trigger: ReactNode }) {
           </div>
         <div className=" flex flex-col gap-2">
             <Label htmlFor="description">Description</Label>
-            <Input id="description" placeholder="description" />
+            <Textarea id="description" placeholder="description" />
           </div>
           <div className="flex gap-5 w-full">
           <div className="w-1/2 flex flex-col gap-2">

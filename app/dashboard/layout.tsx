@@ -1,7 +1,10 @@
+'use client'
+
 import { AppSidebarDashboard } from "@/components/ui/app-sidebar-dashboard";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Geist, Geist_Mono } from "next/font/google";
 
 const geistSans = Geist({
@@ -19,11 +22,11 @@ export default function DashboardLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const queryClient = new QueryClient()
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+   
+        <QueryClientProvider client={queryClient}>
+
         <SidebarProvider>
           <AppSidebarDashboard />
           <div className="absolute flex mt-4 items-center z-50">
@@ -35,7 +38,7 @@ export default function DashboardLayout({
             <main className="w-full">{children}</main>
           </ThemeProvider>
         </SidebarProvider>
-      </body>
-    </html>
+        </QueryClientProvider>
+      
   );
 }

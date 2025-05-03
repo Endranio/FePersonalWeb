@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from "@/components/ui/button";
 import { ModalAddExperience } from "@/components/ui/modal-experience";
 import { SidebarTrigger } from "@/components/ui/sidebar";

@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ReactNode, useState } from "react";
+import { Textarea } from "./textarea";
 
 export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
 
@@ -43,7 +44,7 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
           </div>
           <div className=" flex flex-col gap-2">
             <Label htmlFor="description">Description</Label>
-            <Input id="description" placeholder="description" />
+            <Textarea id="description" placeholder="description" />
           </div>
           <div className="flex gap-5 w-full">
           <div className="w-1/2 mt-2 flex items-center gap-2">

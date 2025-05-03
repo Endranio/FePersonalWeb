@@ -3,22 +3,29 @@
 import { Autoplay, Virtual } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-// Import Swiper styles
+
 import "swiper/css";
 
 import StackIcon from "tech-stack-icons";
+import type { TechStack } from "@/types/type";
 
-export default function TechCard() {
-  const Icon = [
-    <StackIcon key="reactjs" name="reactjs" className="w-10 h-10" />,
-    <StackIcon key="typescript" name="typescript" className="w-10 h-10" />,
-    <StackIcon key="js" name="js" className="w-10 h-10" />,
-    <StackIcon key="tailwindcss" name="tailwindcss" className="w-10 h-10" />,
-    <StackIcon key="nextjs" name="nextjs" className="w-10 h-10" />,
-    <StackIcon key="nodejs" name="nodejs" className="w-10 h-10" />,
-    <StackIcon key="postgresql" name="postgresql" className="w-10 h-10" />,
-    <StackIcon key="prisma" name="prisma" className="w-10 h-10" />,
-  ];
+type Props={
+  techList:TechStack[]
+}
+
+export default function TechCard({techList}:Props) {
+
+  
+  // const Icon = [
+  //   <StackIcon key="reactjs" name="reactjs" className="w-10 h-10" />,
+  //   <StackIcon key="typescript" name="typescript" className="w-10 h-10" />,
+  //   <StackIcon key="js" name="js" className="w-10 h-10" />,
+  //   <StackIcon key="tailwindcss" name="tailwindcss" className="w-10 h-10" />,
+  //   <StackIcon key="nextjs" name="nextjs" className="w-10 h-10" />,
+  //   <StackIcon key="nodejs" name="nodejs" className="w-10 h-10" />,
+  //   <StackIcon key="postgresql" name="postgresql" className="w-10 h-10" />,
+  //   <StackIcon key="prisma" name="prisma" className="w-10 h-10" />,
+  // ];
 
   return (
     <div className="relative">
@@ -36,19 +43,20 @@ export default function TechCard() {
             320: { slidesPerView: 2 },
             480: { slidesPerView: 3 },
             640: { slidesPerView: 4 },
-            768: { slidesPerView: 5 },
-            1024: { slidesPerView: 6 },
-            1280: { slidesPerView: 7 },
+            768: { slidesPerView: 4},
+            1024: { slidesPerView: 4 },
+            1280: { slidesPerView: 4 },
           }}
         >
-          {Icon.map((icons, index) => (
-            <SwiperSlide key={index}>
-              <div className="inline-flex p-5 rounded-xl justify-center dark:bg-gray-800 ">
-                {icons}
-              </div>
-            </SwiperSlide>
-          ))}
+          {techList.map((tech, index) => (
+  <SwiperSlide key={index}>
+    <div className="inline-flex p-5 rounded-xl justify-center dark:bg-gray-800">
+      <img src={tech.tech} alt={tech.name} className="w-10 h-10 object-contain" />
+    </div>
+  </SwiperSlide>
+))}
         </Swiper>
+        
       </div>
     </div>
   );

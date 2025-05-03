@@ -66,9 +66,10 @@
     }
   ],
   "profile": {
-    "image": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png",
-    "headers": "Hi, I'm a Fullstack Developer",
-    "description": "Passionate about building end-to-end web applications.",
+    "image": "profile.jpg",
+    "headers": "Hi I'm Endra 👋",
+   "description": "Hi! I'm an aspiring fullstack developer currently learning modern web development.\nI've been working with technologies like React, TypeScript, Next.js, and Express, as well as UI frameworks such as ShadCN UI, Tailwind CSS, and Chakra UI.\nI'm also familiar with tools like React Router DOM and TanStack Query to build responsive and efficient web applications.\nThis portfolio is a showcase of my learning journey and a stepping stone as I seek opportunities to start my career in the tech industry.",
+    "location":"Depok,Sawangan,Indonesia",
     "position": "Fullstack Developer",
     "available": true,
     "whatsapp": "+621234567890",

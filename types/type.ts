@@ -22,6 +22,7 @@ export type ProfileDTO={
     image:string
     headers: string
     description:string
+    location:string
     position:string
     available:boolean
     whatsapp:string
