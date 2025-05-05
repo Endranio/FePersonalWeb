@@ -20,6 +20,7 @@ export type ProjectDTO={
 }
 export type ProfileDTO={
     image:string
+    email:string
     headers: string
     description:string
     location:string

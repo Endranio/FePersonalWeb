@@ -1,3 +1,4 @@
+
 import {
   Table,
   TableBody,
@@ -17,7 +18,7 @@ import { api } from "@/lib/api";
 
 export function TableExperience() {
   const { data: works } = useQuery<WorkExDTO[]>({
-    queryKey: ["tech"],
+    queryKey: ["work-experience"],
     queryFn: async () => {
       const res = await api("/work_experience");
       console.log(res.data);
@@ -29,11 +30,11 @@ export function TableExperience() {
       <TableHeader>
         <TableRow>
           <TableHead className="w-[80px]">Image</TableHead>
-          <TableHead className="w-[250px]">Position</TableHead>
-          <TableHead className="w-[300px]">Tech-Stack</TableHead>
-          <TableHead className="w-[400px]">Description</TableHead>
+          <TableHead className="w-[150px]">Position</TableHead>
+          <TableHead className="w-[200px]">Tech-Stack</TableHead>
+          <TableHead className="w-[300px]">Description</TableHead>
           <TableHead className="w-[200px]">Duration</TableHead>
-          <TableHead>Edit</TableHead>
+          <TableHead className="text-end"></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -61,12 +62,15 @@ export function TableExperience() {
             <TableCell>
               {work.startDate} to {work.endDate}
             </TableCell>
-            <TableCell className="flex gap-3 text-right  my-2 mr-3">
+            <TableCell className="  ">
+              <div className="flex gap-3 justify-end">
+
               <ModalEditExperience
                 defaultValues={work}
                 trigger={<FaRegEdit className="cursor-pointer" />}
-              />
+                />
               <FaRegTrashAlt />
+                </div>
             </TableCell>
           </TableRow>
         ))}

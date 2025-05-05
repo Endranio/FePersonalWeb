@@ -1,7 +1,7 @@
 import {z} from 'zod'
 
 export const AddTechSchema = z.object({
-    tech:z.instanceof(FileList),
+    tech:z.custom<FileList>(),
     name:z.string()
 })
  
