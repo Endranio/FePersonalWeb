@@ -12,19 +12,61 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { api } from "@/lib/api"
 import { AddTechSchema, AddTechSchemaDTO } from "@/schema/tech-schema"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { DialogClose } from "@radix-ui/react-dialog"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import axios from "axios"
 import { ReactNode } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 export function ModalTech({ trigger }: { trigger: ReactNode }) {
 
-  const {handleSubmit,register,formState:{errors}} = useForm<AddTechSchemaDTO>({
+  const {handleSubmit,register,formState:{errors},reset} = useForm<AddTechSchemaDTO>({
     mode:"onChange",
     resolver:zodResolver(AddTechSchema)
   })
-  const onSubmit = (data:any)=>{console.log(data)}
 
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending } = useMutation<
+    any,
+    Error,
+    AddTechSchemaDTO
+  >({
+    mutationKey: ['add-techs'],
+    mutationFn: async (data: AddTechSchemaDTO) => {
+      const formData = new FormData();
+      formData.append('name', data.name);
+      formData.append('tech', data.tech[0]);
+
+      const response = await api.post('/techs', formData);
+      return response.data;
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        return toast.error(error.response?.data.message);
+      }
+
+      toast.error('something wrong');
+    },
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({
+        queryKey: ['techs'],
+      });
+      reset()
+      toast.success(data.message);
+    },
+  });
+
+
+  const onSubmit = async(data:AddTechSchemaDTO)=>{
+    
+    await mutateAsync(data)
+
+  }
+  
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -52,9 +94,20 @@ export function ModalTech({ trigger }: { trigger: ReactNode }) {
             <Input id="username" type="file" className="col-span-3" {...register("tech")} />
             <p>{errors.tech?.message}</p>
           </div>
+      
+          <DialogClose asChild>
         <DialogFooter>
-          <Button type="submit">Add</Button>
+        
+
+          <Button type="submit" disabled={isPending}>{isPending ? (
+            <div className="w-5 h-5 border-2 border-t-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          ) : (
+            "Continue"
+          )}</Button>
+        
         </DialogFooter>
+          </DialogClose>
+        
         </form>
       </DialogContent>
     </Dialog>

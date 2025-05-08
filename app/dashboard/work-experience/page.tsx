@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { ModalAddExperience } from "@/components/work-experience/modal-experience";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { TableExperience } from "@/components/ui/table-experience";
+import { TableExperience } from "@/components/work-experience/table-experience";
 
 export default function WorkExperience() {
   return (

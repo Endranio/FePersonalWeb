@@ -23,24 +23,63 @@ import {
 
 import { RxCross1 } from "react-icons/rx";
 import UseField from "./hooks/use-field";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "@/lib/api";
+import axios from "axios";
+import { toast } from "sonner";
+import Spinner from "../ui/spiner";
 
 export function ModalAddExperience({ trigger }: { trigger: ReactNode }) {
   const {
     register,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<AddExperienceSchemaDTO>({
     mode: "onChange",
     resolver: zodResolver(AddExperienceSchema),
   });
-  const onSubmit = (data: any) => console.log(data);
+
+  const queryClient = useQueryClient()
+  const {mutateAsync,isPending} = useMutation<any,Error,AddExperienceSchemaDTO>({
+    mutationKey:["add-experience"],
+    mutationFn: async(data:AddExperienceSchemaDTO)=>{
+      const formData= new FormData()
+      formData.append("image",data.image[0])
+      const imageUrl = await api.post("/upload",formData)
+
+      const experienceData = {
+        ...data,
+        image:imageUrl.data.imageUrl
+      }
+      const response =  await api.post("/experience",experienceData)
+      return response.data
+    },
+    onError:(error)=>{
+      if (axios.isAxiosError(error)){
+        return toast.error(error.response?.data.message)
+      }
+      toast.error("something wrong")
+    },
+    onSuccess: async(data)=>{
+      await queryClient.invalidateQueries({
+        queryKey:['experience']
+      })
+      reset()
+      toast.success(data.message)
+    }
+  })
+
+  const onSubmit = async(data:AddExperienceSchemaDTO) => {
+    await mutateAsync(data)
+  }
 
   const {handleDeleteJob,handleDeleteTech,handlejobdesk,handletech,jobs,techs} = UseField()
 
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] max-h-[110vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Add New Experience</DialogTitle>
           <DialogDescription>
@@ -95,7 +134,7 @@ export function ModalAddExperience({ trigger }: { trigger: ReactNode }) {
                   {...register(`jobdesk.${index}`)}
                 />
                 {index !== 0 && (
-                  <Button
+                  <Button 
                     onClick={() => {
                       handleDeleteJob(index);
                     }}
@@ -131,12 +170,18 @@ export function ModalAddExperience({ trigger }: { trigger: ReactNode }) {
           </div>
           <div className=" flex flex-col gap-2">
             <Label htmlFor="company">Company</Label>
+            <Input id="company" type="text" {...register("company")} />
+
+            <p className="text-red-500 text-sm">{errors.company?.message}</p>
+          </div>
+          <div className=" flex flex-col gap-2">
+            <Label htmlFor="company">Image</Label>
             <Input id="company" type="file" {...register("image")} />
 
             <p className="text-red-500 text-sm">{errors.image?.message}</p>
           </div>
           <DialogFooter>
-            <Button type="submit">Add</Button>
+            <Button disabled={isPending} type="submit">{isPending?<Spinner/>:"Add"}</Button>
           </DialogFooter>
         </form>
       </DialogContent>

@@ -3,10 +3,11 @@ import ProjectCard from "./project-card";
 import { FaWhatsapp } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { ProjectDTO } from "@/types/type";
+import { api } from "@/lib/api";
 
 export default async function Project() {
-  const res = await fetch("http://localhost:3001/projects");
-  const data = await res.json();
+  const res = await api.get("/projects")
+  const data = res.data
   console.log(data);
 
   return (

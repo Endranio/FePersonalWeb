@@ -8,7 +8,7 @@ export const AddTechSchema = z.object({
 export type AddTechSchemaDTO = z.infer<typeof AddTechSchema>
 
 export const UpdateTechSchema =z.object({
-    tech:z.instanceof(FileList),
+    tech:z.custom<FileList>(),
     name:z.string()
 })
 

@@ -5,7 +5,7 @@ import type { TechStack } from "@/types/type";
 
 export default async function TechStack(){
 
-    const res = await api.get("/tech_stack")
+    const res = await api.get("/techs")
     const techList = res.data;
     return(
         <div id="tech-stack" className="pt-28">

@@ -18,11 +18,12 @@ import {
 } from "@/schema/experience-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { WorkExDTO } from "@/types/type";
 import { api } from "@/lib/api";
 import UseField from "./hooks/use-field";
 import { RxCross1 } from "react-icons/rx";
+import Spinner from "../ui/spiner";
 
 export function ModalEditExperience({
   trigger,
@@ -35,13 +36,14 @@ export function ModalEditExperience({
     register,
     handleSubmit,
     formState: { errors },
+    
     reset,
   } = useForm<AddExperienceSchemaDTO>({
     mode: "onChange",
     resolver: zodResolver(AddExperienceSchema),
   });
 
-  const onSubmit = (data: any) => console.log(data);
+
   useEffect(() => {
     if (defaultValues) {
       reset({
@@ -55,6 +57,31 @@ export function ModalEditExperience({
     }
   }, [defaultValues, reset]);
 
+  const queryClient = useQueryClient()
+  const {mutateAsync,isPending} = useMutation<any,Error,AddExperienceSchemaDTO>({
+    mutationKey:["edit-experience"],
+    mutationFn:async (data:AddExperienceSchemaDTO)=>{
+let imageUrl = defaultValues.image
+if(data.image){
+  const formData = new FormData()
+  formData.append("image",data.image[0])
+  const newImageUrl = await api.post("/upload",formData)
+  imageUrl = newImageUrl.data.imageUrl
+}
+
+const experienceData ={
+  ...data,
+  image:imageUrl
+}
+const res = await api.patch(`/experience/${defaultValues.id}`,experienceData)
+return res.data
+    }
+  })
+
+  const onSubmit = (data:AddExperienceSchemaDTO) => {
+    mutateAsync(data)
+  };
+
   const {
     handleDeleteJob,
     handleDeleteTech,
@@ -67,7 +94,7 @@ export function ModalEditExperience({
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] max-h-[110vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Edit Experience</DialogTitle>
           <DialogDescription>
@@ -153,11 +180,16 @@ export function ModalEditExperience({
           </div>
           <div className=" flex flex-col gap-2">
             <Label htmlFor="company">Company</Label>
+            <Input id="company" placeholder="Company" {...register("company")} />
+            <p className="text-red-500 text-sm">{errors.company?.message}</p>
+          </div>
+          <div className=" flex flex-col gap-2">
+            <Label htmlFor="company">Image</Label>
             <Input id="company" type="file" {...register("image")} />
             <p className="text-red-500 text-sm">{errors.image?.message}</p>
           </div>
           <DialogFooter>
-            <Button type="submit">Save</Button>
+            <Button  type="submit" disabled={isPending}>{isPending?<Spinner/>:"Save"}</Button>
           </DialogFooter>
         </form>
       </DialogContent>

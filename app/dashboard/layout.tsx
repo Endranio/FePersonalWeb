@@ -6,6 +6,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default function DashboardLayout({
           </div>
 
           <ThemeProvider attribute="class" enableSystem defaultTheme="system">
+            <Toaster position="bottom-right" richColors />
             <main className="w-full">{children}</main>
           </ThemeProvider>
         </SidebarProvider>

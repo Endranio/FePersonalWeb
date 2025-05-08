@@ -1,9 +1,10 @@
 import { WorkExDTO } from "@/types/type";
 import WorkCard from "./work-ex-card";
+import { api } from "@/lib/api";
 
 export default async function WorkExperience() {
-  const res = await fetch("http://localhost:3001/work_experience");
-  const data = await res.json();
+  const res = await api.get("/experience");
+  const data = res.data;
 
   return (
     <div id="work-ex">

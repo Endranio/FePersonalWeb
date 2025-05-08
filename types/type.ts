@@ -1,4 +1,5 @@
 export type WorkExDTO={
+    id:string
     image:string
     position:string
     company:string
@@ -9,6 +10,7 @@ export type WorkExDTO={
 }
 
 export type ProjectDTO={
+    id:string
     image:string
     title:string
     description:string
@@ -32,6 +34,7 @@ export type ProfileDTO={
 }
 
 export type TechStack={
+    id:string
     tech:string
     name:string
 

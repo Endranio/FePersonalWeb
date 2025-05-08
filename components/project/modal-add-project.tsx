@@ -19,6 +19,11 @@ import { ProjectSchema, ProjectSchemaDTO } from "@/schema/project-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import UseField from "../work-experience/hooks/use-field";
 import { RxCross1 } from "react-icons/rx";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "@/lib/api";
+import axios from "axios";
+import { toast } from "sonner";
+import Spinner from "../ui/spiner";
 
 export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
   const {
@@ -26,21 +31,64 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
     formState: { errors },
     handleSubmit,
     watch,
+    reset,
   } = useForm<ProjectSchemaDTO>({
     mode: "onChange",
     resolver: zodResolver(ProjectSchema),
   });
 
-  const github = watch("github", false);
-  const demo = watch("demo", false);
+  const github = watch("isGithub", false);
+  const demo = watch("isDemo", false);
 
-  const onSubmit = ()=>console.log(watch())
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending } = useMutation<any, Error, ProjectSchemaDTO>({
+    mutationKey: ["add-project"],
+    mutationFn: async (data: ProjectSchemaDTO) => {
+      const formData = new FormData();
+     
+      formData.append("image", data.image[0]);
+
+      const imageResponse = await api.post("/upload", formData);
+     
+      const projectData = {
+        title: data.title,
+        description: data.description,
+        tech: data.tech,
+        isGithub: data.isGithub,
+        isDemo: data.isDemo,
+        linkDemo: data.linkDemo ,
+        linkGithub: data.linkGithub ,
+        image: imageResponse.data.imageUrl,
+      };
+
+      const response = await api.post("/projects", projectData);
+
+      return response.data;
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        return toast.error(error.response?.data.message);
+      }
+      toast.error("something wrong");
+    },
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({
+        queryKey: ["projects"],
+      });
+      reset()
+      toast.success(data.message);
+    },
+  });
+
+  const onSubmit = async (data: ProjectSchemaDTO) => {
+    await mutateAsync(data);
+  };
   const { techs, handletech, handleDeleteTech } = UseField();
 
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] max-h-[110vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Add New Project</DialogTitle>
           <DialogDescription>
@@ -53,9 +101,9 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
             <Input
               id="position"
               placeholder="Fullstack Developer"
-              {...register("name")}
+              {...register("title")}
             />
-            <p className="text-red-500 text-sm">{errors.name?.message}</p>
+            <p className="text-red-500 text-sm">{errors.title?.message}</p>
           </div>
           <div className=" flex flex-col gap-2">
             <Label htmlFor="tech">Tech Stack</Label>
@@ -78,7 +126,12 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
                 )}
               </div>
             ))}
-            <Button className="w-[20%]" onClick={handletech}>
+            <Button
+              className="w-[20%]"
+              onClick={(e) => {
+                e.preventDefault(), handletech();
+              }}
+            >
               Add tech
             </Button>
           </div>
@@ -97,7 +150,7 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
                 id="available"
                 type="checkbox"
                 className="w-4 h-4 accent-blue-600"
-                {...register("github")}
+                {...register("isGithub")}
               />
               <Label htmlFor="available" className="text-sm">
                 Github
@@ -109,7 +162,7 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
                 id="available"
                 type="checkbox"
                 className="w-4 h-4 accent-blue-600"
-                {...register("demo")}
+                {...register("isDemo")}
               />
               <Label htmlFor="available" className="text-sm">
                 Live Demo
@@ -139,7 +192,7 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
             <p className="text-red-500 text-sm">{errors.image?.message}</p>
           </div>
           <DialogFooter>
-            <Button type="submit">Add</Button>
+            <Button disabled={isPending} type="submit">{isPending?<Spinner/>:"Add"}</Button>
           </DialogFooter>
         </form>
       </DialogContent>

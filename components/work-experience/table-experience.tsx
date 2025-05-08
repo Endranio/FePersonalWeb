@@ -10,17 +10,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
-import { Button } from "./button";
+
 import { ModalEditExperience } from "../work-experience/modal-edit-experience";
 import { useQuery } from "@tanstack/react-query";
 import { WorkExDTO } from "@/types/type";
 import { api } from "@/lib/api";
+import { AlertDelete } from "../ui/alert-delete";
 
 export function TableExperience() {
   const { data: works } = useQuery<WorkExDTO[]>({
-    queryKey: ["work-experience"],
+    queryKey: ["experience"],
     queryFn: async () => {
-      const res = await api("/work_experience");
+      const res = await api("/experience");
       console.log(res.data);
       return res.data;
     },
@@ -50,7 +51,7 @@ export function TableExperience() {
               {work.tech.map((item, index) => (
                 <p
                   key={index}
-                  className="px-2 py-1 w-fit  text-[12px] bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-transparent text-gray-600 dark:text-gray-400"
+                  className="px-2 py-1 w-fit text-[12px] bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-transparent text-gray-600 dark:text-gray-400"
                 >
                   {item}
                 </p>
@@ -69,7 +70,8 @@ export function TableExperience() {
                 defaultValues={work}
                 trigger={<FaRegEdit className="cursor-pointer" />}
                 />
-              <FaRegTrashAlt />
+                <AlertDelete invalidate="experience" url="experience" key="delete-experience" trigger={<FaRegTrashAlt />} id={work.id}/>
+              
                 </div>
             </TableCell>
           </TableRow>

@@ -4,6 +4,7 @@ import {z} from 'zod'
 
 export const AddExperienceSchema = z.object({
     image:z.custom<FileList>(),
+    company:z.string(),
     position:z.string().min(1),
     tech:z.array(z.string()),
     jobdesk:z.array(z.string()),

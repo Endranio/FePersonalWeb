@@ -11,16 +11,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
-import { Button } from "./button";
+
 import { ModalEditProject } from "../project/modal-edit-project";
 import { useQuery } from "@tanstack/react-query";
 import { ProjectDTO } from "@/types/type";
 import { api } from "@/lib/api";
+import { AlertDelete } from "../ui/alert-delete";
 
 
 export function TableProject() {
   const {data:projects,} = useQuery<ProjectDTO[]>({
-    queryKey:['project'],
+    queryKey:['projects'],
     queryFn: async()=>{
       const res = await api.get('/projects')
       return res.data
@@ -71,7 +72,7 @@ export function TableProject() {
             <TableCell className="">
               <div className="flex justify-end gap-5">
 
-              <FaRegTrashAlt />
+             <AlertDelete invalidate="projects"  id={project.id} url="projects" trigger={<FaRegTrashAlt />} />  
               <ModalEditProject
               defaultValue={project}
               trigger={<FaRegEdit className="cursor-pointer" />}
