@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { useForm } from "react-hook-form";
 import { ProjectSchema, ProjectSchemaDTO } from "@/schema/project-schema";
@@ -26,6 +26,7 @@ import { ProjectResponse } from "@/response/project-response";
 import axios from "axios";
 import { toast } from "sonner";
 import Spinner from "../ui/spiner";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 export function ModalEditProject({
   trigger,
@@ -34,6 +35,9 @@ export function ModalEditProject({
   trigger: ReactNode;
   defaultValue: ProjectDTO;
 }) {
+
+  const closeRef = useRef<HTMLButtonElement>(null)
+
   const {
     register,
     reset,
@@ -54,6 +58,7 @@ export function ModalEditProject({
         linkDemo: defaultValue.linkDemo,
         linkGithub: defaultValue.linkGithub,
         tech: defaultValue.tech,
+       
         title: defaultValue.title,
 
       });
@@ -78,13 +83,7 @@ export function ModalEditProject({
       console.log(imageUrl,"imageurl")}
       const projectData = {
       
-        title:data.title,
-        description:data.description,
-        tech:data.tech,
-        isGithub:data.isGithub,
-        isDemo:data.isDemo,
-        linkDemo:data.linkDemo,
-        linkGithub:data.linkGithub,
+       ...data,
         image:imageUrl
       }
       console.log("projectdata",projectData)
@@ -105,6 +104,7 @@ export function ModalEditProject({
         
       })
       toast.success(data.message)
+      closeRef.current?.click()
     }
 
   })
@@ -148,6 +148,7 @@ export function ModalEditProject({
                   <Button
                     className="w-[10%]"
                     variant="ghost"
+                    type="button"
                     onClick={() => handleDeleteTech(index)}
                   >
                     <RxCross1 />
@@ -224,6 +225,9 @@ export function ModalEditProject({
 
           <DialogFooter>
             <Button disabled={isPending} type="submit">{isPending?(<Spinner/> ):"Save"}</Button>
+            <DialogClose asChild>
+              <Button ref={closeRef} hidden/>
+            </DialogClose>
           </DialogFooter>
         </form>
       </DialogContent>

@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
 
-import StackIcon from "tech-stack-icons";
+
 import type { TechStack } from "@/types/type";
 
 type Props={
@@ -14,18 +14,6 @@ type Props={
 }
 
 export default function TechCard({techList}:Props) {
-
-  
-  // const Icon = [
-  //   <StackIcon key="reactjs" name="reactjs" className="w-10 h-10" />,
-  //   <StackIcon key="typescript" name="typescript" className="w-10 h-10" />,
-  //   <StackIcon key="js" name="js" className="w-10 h-10" />,
-  //   <StackIcon key="tailwindcss" name="tailwindcss" className="w-10 h-10" />,
-  //   <StackIcon key="nextjs" name="nextjs" className="w-10 h-10" />,
-  //   <StackIcon key="nodejs" name="nodejs" className="w-10 h-10" />,
-  //   <StackIcon key="postgresql" name="postgresql" className="w-10 h-10" />,
-  //   <StackIcon key="prisma" name="prisma" className="w-10 h-10" />,
-  // ];
 
   return (
     <div className="relative">
@@ -44,8 +32,8 @@ export default function TechCard({techList}:Props) {
             480: { slidesPerView: 3 },
             640: { slidesPerView: 4 },
             768: { slidesPerView: 4},
-            1024: { slidesPerView: 4 },
-            1280: { slidesPerView: 4 },
+            1024: { slidesPerView: 2 },
+            1280: { slidesPerView: 2 },
           }}
         >
           {techList.map((tech, index) => (

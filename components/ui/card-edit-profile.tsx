@@ -12,20 +12,24 @@ import { Input } from "./input";
 import { Label } from "./label";
 import { Button } from "./button";
 import { Textarea } from "./textarea";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ProfileDTO } from "@/types/type";
 import { api } from "@/lib/api";
 import { useForm } from "react-hook-form";
 import { ProfileSchema, ProfileSchemaDTO } from "@/schema/profile-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
+import Spinner from "./spiner";
+import axios from "axios";
+import { toast } from "sonner";
 
 export default function CardEditProfile() {
 
   const {data:profile} = useQuery<ProfileDTO>({
     queryKey:['edit-profile'],
     queryFn:async()=>{
-      const res = await api("/profile")
+      const res = await api.get("/profile")
+      console.log("response profile",res.data)
       return res.data
     }
 
@@ -37,6 +41,42 @@ export default function CardEditProfile() {
   const {reset,register,handleSubmit,formState:{errors}} = useForm<ProfileSchemaDTO>({
     mode:"onChange",
     resolver:zodResolver(ProfileSchema)
+  })
+
+  const queryClient = useQueryClient()
+
+  const {mutateAsync,isPending} = useMutation<any,Error,ProfileSchemaDTO>({
+
+    mutationKey:["edit-profile"],
+    mutationFn: async(data:ProfileSchemaDTO)=>{
+      let imageUrl = profile?.image
+      console.log("data mage",imageUrl)
+      if(data.image){
+        const formData = new FormData()
+        formData.append("image",data.image[0])
+        const newImageUrl = await api.post("/upload",formData)
+        imageUrl = newImageUrl.data.imageUrl
+      }
+      const ProfileData ={
+        ...data,
+        image:imageUrl
+      }
+      const res = await api.patch('/profile',ProfileData)
+      return res.data
+    },
+    onError:(error)=>{
+      if (axios.isAxiosError(error)){
+        return toast.error(error.response?.data.message)
+      }
+      toast.error("something wrong")
+    },
+    onSuccess: async(data)=>{
+      await queryClient.invalidateQueries({
+        queryKey:['profile']
+      })
+      toast.success(data.message)
+    }
+    
   })
   
   useEffect(()=>{
@@ -53,7 +93,9 @@ export default function CardEditProfile() {
       })
     }
   },[profile,reset])
-  const onSubmit = (data:any)=>(console.log(data))
+  const onSubmit = async(data:ProfileSchemaDTO)=>{
+   await mutateAsync(data)
+  }
 
   return (
     <Card>
@@ -73,6 +115,7 @@ export default function CardEditProfile() {
           <div className="w-1/2 flex flex-col gap-2">
             <Label htmlFor="position">Location</Label>
             <Input id="position" placeholder="Position" {...register("location")} />
+            <p className="text-red-500 text-sm">{errors.location?.message}</p>
           </div>
         </div>
         <div className="flex gap-5 w-full">
@@ -120,7 +163,7 @@ export default function CardEditProfile() {
         </div>
       </CardContent>
       <CardFooter className="flex justify-end">
-        <Button type="submit" >Save Changes</Button>
+        <Button disabled={isPending} type="submit" >{isPending?<Spinner/>:"Save"}</Button>
       </CardFooter>
         </form>
     </Card>

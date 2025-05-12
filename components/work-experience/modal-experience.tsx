@@ -13,7 +13,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ReactNode, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { useForm } from "react-hook-form";
 import {
@@ -28,8 +28,12 @@ import { api } from "@/lib/api";
 import axios from "axios";
 import { toast } from "sonner";
 import Spinner from "../ui/spiner";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 export function ModalAddExperience({ trigger }: { trigger: ReactNode }) {
+
+  const closeRef = useRef<HTMLButtonElement>(null)
+
   const {
     register,
     reset,
@@ -67,6 +71,7 @@ export function ModalAddExperience({ trigger }: { trigger: ReactNode }) {
       })
       reset()
       toast.success(data.message)
+      closeRef.current?.click()
     }
   })
 
@@ -182,6 +187,9 @@ export function ModalAddExperience({ trigger }: { trigger: ReactNode }) {
           </div>
           <DialogFooter>
             <Button disabled={isPending} type="submit">{isPending?<Spinner/>:"Add"}</Button>
+            <DialogClose asChild>
+              <Button ref={closeRef} className="hidden"/>
+            </DialogClose>
           </DialogFooter>
         </form>
       </DialogContent>

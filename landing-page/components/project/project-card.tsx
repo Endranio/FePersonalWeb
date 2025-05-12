@@ -25,7 +25,10 @@ export default function ProjectCard(project: ProjectDTO) {
         </div>
         <div className="flex gap-5 mt-auto">
           {project.isGithub ? (
-            <Link href={project.linkGithub} className="text-sm flex gap-1 items-center text-blue-500">
+            <Link
+              href={project.linkGithub}
+              className="text-sm flex gap-1 items-center text-blue-500"
+            >
               <FaGithub className="w-4 h-4" />
               View On Repository
             </Link>
@@ -44,13 +47,10 @@ export default function ProjectCard(project: ProjectDTO) {
               Live Demo
             </Link>
           ) : (
-            <Link
-              className="text-sm flex gap-1 items-center pointer-events-none"
-              href=""
-            >
+            <p className="text-sm flex gap-1 items-center pointer-events-none">
               <FaExternalLinkAlt className="w-4 h-4" />
               Demo Unavailale
-            </Link>
+            </p>
           )}
         </div>
       </div>

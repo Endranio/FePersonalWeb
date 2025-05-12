@@ -10,11 +10,12 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import {
   AddExperienceSchema,
-  AddExperienceSchemaDTO,
+  EditExperienceSchema,
+  EditExperienceSchemaDTO,
 } from "@/schema/experience-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -24,62 +25,91 @@ import { api } from "@/lib/api";
 import UseField from "./hooks/use-field";
 import { RxCross1 } from "react-icons/rx";
 import Spinner from "../ui/spiner";
+import axios from "axios";
+import { toast } from "sonner";
+import { DialogClose } from "@radix-ui/react-dialog";
+
+type EditExperianceProps = {
+  trigger: ReactNode;
+  defaultValues: WorkExDTO;
+};
 
 export function ModalEditExperience({
   trigger,
   defaultValues,
-}: {
-  trigger: ReactNode;
-  defaultValues: WorkExDTO;
-}) {
+}: EditExperianceProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    
+
     reset,
-  } = useForm<AddExperienceSchemaDTO>({
+  } = useForm<EditExperienceSchemaDTO>({
     mode: "onChange",
-    resolver: zodResolver(AddExperienceSchema),
+    resolver: zodResolver(EditExperienceSchema),
   });
 
+  const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (defaultValues) {
       reset({
         position: defaultValues.position,
         tech: defaultValues.tech,
-        jobdesk: defaultValues.jobDesk,
+        company: defaultValues.company,
+        jobdesk: defaultValues.jobdesk,
         startDate: defaultValues.startDate,
         endDate: defaultValues.endDate,
-        image: undefined,
       });
     }
   }, [defaultValues, reset]);
 
-  const queryClient = useQueryClient()
-  const {mutateAsync,isPending} = useMutation<any,Error,AddExperienceSchemaDTO>({
-    mutationKey:["edit-experience"],
-    mutationFn:async (data:AddExperienceSchemaDTO)=>{
-let imageUrl = defaultValues.image
-if(data.image){
-  const formData = new FormData()
-  formData.append("image",data.image[0])
-  const newImageUrl = await api.post("/upload",formData)
-  imageUrl = newImageUrl.data.imageUrl
-}
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending } = useMutation<
+    any,
+    Error,
+    EditExperienceSchemaDTO
+  >({
+    mutationKey: ["edit-experience"],
+    mutationFn: async (data: EditExperienceSchemaDTO) => {
+      let imageUrl = defaultValues.image;
+      console.log(imageUrl, "dedault");
+      if (data.image) {
+        const formData = new FormData();
+        formData.append("image", data.image[0]);
+        const newImageUrl = await api.post("/upload", formData);
+        imageUrl = newImageUrl.data.imageUrl;
+      }
 
-const experienceData ={
-  ...data,
-  image:imageUrl
-}
-const res = await api.patch(`/experience/${defaultValues.id}`,experienceData)
-return res.data
-    }
-  })
+      const experienceData = {
+        ...data,
+        image: imageUrl,
+      };
+      const res = await api.patch(
+        `/experience/${defaultValues.id}`,
+        experienceData
+      );
+      return res.data;
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data.message);
+      }
+      toast.error("something wrong");
+    },
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({
+        queryKey: ["experience"],
+      });
 
-  const onSubmit = (data:AddExperienceSchemaDTO) => {
-    mutateAsync(data)
+      toast.success(data.message);
+      console.log(closeRef);
+      closeRef.current?.click();
+    },
+  });
+
+  const onSubmit = (data: EditExperienceSchemaDTO) => {
+    mutateAsync(data);
   };
 
   const {
@@ -89,12 +119,12 @@ return res.data
     handletech,
     jobs,
     techs,
-  } = UseField(defaultValues.jobDesk, defaultValues.tech);
+  } = UseField(defaultValues.jobdesk, defaultValues.tech);
 
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] max-h-[110vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[425px] max-h-[100vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Edit Experience</DialogTitle>
           <DialogDescription>
@@ -180,7 +210,11 @@ return res.data
           </div>
           <div className=" flex flex-col gap-2">
             <Label htmlFor="company">Company</Label>
-            <Input id="company" placeholder="Company" {...register("company")} />
+            <Input
+              id="company"
+              placeholder="Company"
+              {...register("company")}
+            />
             <p className="text-red-500 text-sm">{errors.company?.message}</p>
           </div>
           <div className=" flex flex-col gap-2">
@@ -189,7 +223,12 @@ return res.data
             <p className="text-red-500 text-sm">{errors.image?.message}</p>
           </div>
           <DialogFooter>
-            <Button  type="submit" disabled={isPending}>{isPending?<Spinner/>:"Save"}</Button>
+            <Button type="submit" disabled={isPending}>
+              {isPending ? <Spinner /> : "Save"}
+            </Button>
+            <DialogClose asChild>
+              <button ref={closeRef} hidden />
+            </DialogClose>
           </DialogFooter>
         </form>
       </DialogContent>

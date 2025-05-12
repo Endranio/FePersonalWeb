@@ -18,7 +18,7 @@ export default function WorkCard(work: WorkExDTO) {
           <p>{work.startDate} - {work.endDate}</p>
         </div>
 
-        {work.jobDesk.map((Item, index) => (
+        {work.jobdesk.map((Item, index) => (
           <ul className="list-disc list-inside mt-3 space-y-2" key={index}>
             <li>{Item}</li>
           </ul>

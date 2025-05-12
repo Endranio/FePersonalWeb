@@ -1,7 +1,7 @@
 import {z} from 'zod'
 
 export const ProfileSchema = z.object({
-    image:z.custom<FileList>(),
+    image:z.custom<FileList | string>(),
     cv:z.string(),
     headers:z.string().min(1),
     description:z.string().min(1),

@@ -3,7 +3,7 @@ export type WorkExDTO={
     image:string
     position:string
     company:string
-    jobDesk:Array<string> 
+    jobdesk:Array<string> 
     tech:Array<string>
     startDate:string
     endDate:string

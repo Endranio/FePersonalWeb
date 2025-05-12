@@ -18,11 +18,13 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { DialogClose } from "@radix-ui/react-dialog"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import axios from "axios"
-import { ReactNode } from "react"
+import { ReactNode, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 export function ModalTech({ trigger }: { trigger: ReactNode }) {
+
+  const closeRef = useRef<HTMLButtonElement>(null)
 
   const {handleSubmit,register,formState:{errors},reset} = useForm<AddTechSchemaDTO>({
     mode:"onChange",
@@ -55,8 +57,10 @@ export function ModalTech({ trigger }: { trigger: ReactNode }) {
       await queryClient.invalidateQueries({
         queryKey: ['techs'],
       });
-      reset()
       toast.success(data.message);
+      closeRef.current?.click()
+      reset()
+
     },
   });
 
@@ -95,7 +99,7 @@ export function ModalTech({ trigger }: { trigger: ReactNode }) {
             <p>{errors.tech?.message}</p>
           </div>
       
-          <DialogClose asChild>
+          
         <DialogFooter>
         
 
@@ -104,9 +108,11 @@ export function ModalTech({ trigger }: { trigger: ReactNode }) {
           ) : (
             "Continue"
           )}</Button>
-        
+        <DialogClose asChild>
+          <Button ref={closeRef} hidden/>
+        </DialogClose>
         </DialogFooter>
-          </DialogClose>
+
         
         </form>
       </DialogContent>

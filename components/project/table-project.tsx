@@ -48,7 +48,9 @@ export function TableProject() {
               <img className="w-10" src={project.image} />
             </TableCell>
             <TableCell className="font-medium">{project.title}</TableCell>
-            <TableCell className="flex flex-wrap gap-2">
+            <TableCell >
+              <div className="flex flex-wrap gap-2">
+
               {" "}
               {project.tech.map((item, index) => (
                 <p
@@ -58,6 +60,7 @@ export function TableProject() {
                   {item}
                 </p>
               ))}
+              </div>
             </TableCell>
             <TableCell className="truncate max-w-[20px]">
               {project.description}

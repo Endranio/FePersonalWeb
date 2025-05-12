@@ -2,7 +2,7 @@
 import {z} from 'zod'
 
 export const ProjectSchema =z.object({
-   image:z.custom<FileList>(),
+   image:z.custom<FileList | string>(),
     title:z.string().min(1),
     tech:z.array(z.string()).min(1),
     description:z.string().min(1),
