@@ -1,8 +1,13 @@
 
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { api } from "@/lib/api";
 
-export default function Dashboard() {
+export default async function Dashboard() {
+  const res = await api.get("/dashboard")
+  const data = res.data
+  
+
   return (
     <SidebarProvider>
       <div className="mt-4 flex flex-col w-full relative">
@@ -17,15 +22,15 @@ export default function Dashboard() {
           <div className="flex gap-5">
             <div className="border-2 rounded-xl p-5 flex-1">
               <p className="text-[16px]">Total Project</p>
-              <h1 className="font-bold text-[25px]">3</h1>
+              <h1 className="font-bold text-[25px]">{data.ExperienceCount}</h1>
             </div>
             <div className="border-2 p-5 rounded-xl flex-1">
               <p className="text-[16px]">Work Experience</p>
-              <h1 className="font-bold text-[25px]">3</h1>
+              <h1 className="font-bold text-[25px]">{data.ProjectCount}</h1>
             </div>
             <div className="border-2 p-5 rounded-xl flex-1">
               <p className="text-[16px]">Tech Stack</p>
-              <h1 className="font-bold text-[25px]">3</h1>
+              <h1 className="font-bold text-[25px]">{data.techStackCount}</h1>
             </div>
           </div>
         </div>

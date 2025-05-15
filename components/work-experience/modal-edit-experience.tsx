@@ -11,23 +11,23 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { Textarea } from "../ui/textarea";
 import {
-  AddExperienceSchema,
   EditExperienceSchema,
   EditExperienceSchemaDTO,
+  ExperienceSchema,
+  ExperienceSchemaDTO,
 } from "@/schema/experience-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { WorkExDTO } from "@/types/type";
+import { useFieldArray, useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { WorkExDTO, WorkExFormDTO } from "@/types/type";
 import { api } from "@/lib/api";
-import UseField from "./hooks/use-field";
 import { RxCross1 } from "react-icons/rx";
 import Spinner from "../ui/spiner";
 import axios from "axios";
 import { toast } from "sonner";
 import { DialogClose } from "@radix-ui/react-dialog";
+import ImagePreview from "../ui/image-preview";
 
 type EditExperianceProps = {
   trigger: ReactNode;
@@ -42,29 +42,36 @@ export function ModalEditExperience({
     register,
     handleSubmit,
     formState: { errors },
-
+    control,
     reset,
-  } = useForm<EditExperienceSchemaDTO>({
+  } = useForm<ExperienceSchemaDTO>({
     mode: "onChange",
-    resolver: zodResolver(EditExperienceSchema),
+    resolver: zodResolver(ExperienceSchema),
   });
 
   const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (defaultValues) {
+      const techFields = defaultValues.tech.map((item) => ({ value: item }));
+      const jobdeskFields = defaultValues.jobdesk.map((item) => ({
+        value: item,
+      }));
+
       reset({
         position: defaultValues.position,
-        tech: defaultValues.tech,
         company: defaultValues.company,
-        jobdesk: defaultValues.jobdesk,
+        tech: techFields,
+        jobdesk: jobdeskFields,
         startDate: defaultValues.startDate,
         endDate: defaultValues.endDate,
       });
+      replaceTech(techFields), replaceJobs(jobdeskFields);
     }
   }, [defaultValues, reset]);
 
   const queryClient = useQueryClient();
+
   const { mutateAsync, isPending } = useMutation<
     any,
     Error,
@@ -73,7 +80,7 @@ export function ModalEditExperience({
     mutationKey: ["edit-experience"],
     mutationFn: async (data: EditExperienceSchemaDTO) => {
       let imageUrl = defaultValues.image;
-      console.log(imageUrl, "dedault");
+
       if (data.image) {
         const formData = new FormData();
         formData.append("image", data.image[0]);
@@ -85,6 +92,7 @@ export function ModalEditExperience({
         ...data,
         image: imageUrl,
       };
+
       const res = await api.patch(
         `/experience/${defaultValues.id}`,
         experienceData
@@ -93,34 +101,41 @@ export function ModalEditExperience({
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
-        toast.error(error.response?.data.message);
+        toast.error(error.response?.data.message || "Upload failed");
+      } else {
+        toast.error("Something went wrong");
       }
-      toast.error("something wrong");
     },
     onSuccess: async (data) => {
-      await queryClient.invalidateQueries({
-        queryKey: ["experience"],
-      });
-
+      await queryClient.invalidateQueries({ queryKey: ["experience"] });
       toast.success(data.message);
-      console.log(closeRef);
       closeRef.current?.click();
     },
   });
 
-  const onSubmit = (data: EditExperienceSchemaDTO) => {
-    mutateAsync(data);
+  const onSubmit = (data: ExperienceSchemaDTO) => {
+    const transformData: EditExperienceSchemaDTO = {
+      ...data,
+      tech: data.tech.map((item) => item.value),
+      jobdesk: data.jobdesk.map((item) => item.value),
+    };
+    mutateAsync(transformData);
   };
 
   const {
-    handleDeleteJob,
-    handleDeleteTech,
-    handlejobdesk,
-    handletech,
-    jobs,
-    techs,
-  } = UseField(defaultValues.jobdesk, defaultValues.tech);
+    fields: techFields,
+    append: appendTech,
+    remove: removeTech,
+    replace: replaceTech,
+  } = useFieldArray({ control, name: "tech" });
 
+  const {
+    fields: jobFields,
+    append: appendJob,
+    remove: removeJob,
+    replace: replaceJobs,
+  } = useFieldArray({ control, name: "jobdesk" });
+  const [file, setFile] = useState<File | null>(null);
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -128,76 +143,86 @@ export function ModalEditExperience({
         <DialogHeader>
           <DialogTitle>Edit Experience</DialogTitle>
           <DialogDescription>
-            Add a new work experience to your portfolio
+            Update your work experience information
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4 py-4">
-          <div className=" flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="position">Position</Label>
             <Input
               id="position"
               placeholder="Fullstack Developer"
-              defaultValue={defaultValues.position}
               {...register("position")}
             />
             <p className="text-red-500 text-sm">{errors.position?.message}</p>
           </div>
-          <div className=" flex flex-col gap-2">
+
+          <div className="flex flex-col gap-2">
             <Label htmlFor="tech">Tech Stack</Label>
-            {techs.map((_, index) => (
-              <div key={index} className="flex gap-2">
+            {techFields.map((field, index) => (
+              <div key={field.id} className="flex gap-2 items-center">
                 <Input
-                  id="tech"
                   placeholder="React"
-                  {...register(`tech.${index}`)}
-                />
-                <p className="text-red-500 text-sm">{errors.tech?.message}</p>
-                {index !== 0 && (
-                  <Button
-                    onClick={() => handleDeleteTech(index)}
-                    variant="ghost"
-                  >
-                    <RxCross1 />
-                  </Button>
-                )}
-              </div>
-            ))}
-            <Button onClick={handletech} className="w-[20%]">
-              Add tech
-            </Button>
-          </div>
-          <div className=" flex flex-col gap-2">
-            <Label htmlFor="description">Description</Label>
-            {jobs.map((_, index) => (
-              <div key={index} className="flex gap-2">
-                <Input
-                  id="description"
-                  placeholder="description"
-                  {...register(`jobdesk.${index}`)}
+                  {...register(`tech.${index}.value`)}
                 />
                 <p className="text-red-500 text-sm">
-                  {errors.jobdesk?.message}
+                  {errors.tech?.[index]?.value?.message}
                 </p>
                 {index !== 0 && (
                   <Button
-                    onClick={() => handleDeleteJob(index)}
+                    type="button"
+                    onClick={() => removeTech(index)}
                     variant="ghost"
                   >
-                    {" "}
                     <RxCross1 />
                   </Button>
                 )}
               </div>
             ))}
-            <Button onClick={handlejobdesk} className="w-[20%]">
+            <Button
+              type="button"
+              onClick={() => appendTech({ value: "" })}
+              className="w-[20%]"
+            >
+              Add tech
+            </Button>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="jobdesk">Description</Label>
+            {jobFields.map((field, index) => (
+              <div key={field.id} className="flex gap-2 items-center">
+                <Input
+                  placeholder="Worked on APIs..."
+                  {...register(`jobdesk.${index}.value`)}
+                />
+                <p className="text-red-500 text-sm">
+                  {errors.jobdesk?.[index]?.value?.message}
+                </p>
+                {index !== 0 && (
+                  <Button
+                    type="button"
+                    onClick={() => removeJob(index)}
+                    variant="ghost"
+                  >
+                    <RxCross1 />
+                  </Button>
+                )}
+              </div>
+            ))}
+            <Button
+              type="button"
+              onClick={() => appendJob({ value: "" })}
+              className="w-[20%]"
+            >
               Add job
             </Button>
           </div>
+
           <div className="flex gap-5 w-full">
             <div className="w-1/2 flex flex-col gap-2">
               <Label htmlFor="start">Start Date</Label>
               <Input id="start" type="date" {...register("startDate")} />
-
               <p className="text-red-500 text-sm">
                 {errors.startDate?.message}
               </p>
@@ -208,7 +233,8 @@ export function ModalEditExperience({
               <p className="text-red-500 text-sm">{errors.endDate?.message}</p>
             </div>
           </div>
-          <div className=" flex flex-col gap-2">
+
+          <div className="flex flex-col gap-2">
             <Label htmlFor="company">Company</Label>
             <Input
               id="company"
@@ -217,11 +243,23 @@ export function ModalEditExperience({
             />
             <p className="text-red-500 text-sm">{errors.company?.message}</p>
           </div>
-          <div className=" flex flex-col gap-2">
-            <Label htmlFor="company">Image</Label>
-            <Input id="company" type="file" {...register("image")} />
+
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="image">Image</Label>
+            <Input
+              id="image"
+              type="file"
+              {...register("image", {
+                onChange: (e) => {
+                  const selectedFile = e.target.files?.[0] || null;
+                  setFile(selectedFile);
+                },
+              })}
+            />
+            <ImagePreview file={file} defaultPreview={defaultValues.image} />
             <p className="text-red-500 text-sm">{errors.image?.message}</p>
           </div>
+
           <DialogFooter>
             <Button type="submit" disabled={isPending}>
               {isPending ? <Spinner /> : "Save"}

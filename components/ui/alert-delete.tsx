@@ -38,7 +38,7 @@ type Delete={
         mutationKey: ['delete'],
         mutationFn: async () => {
           const response = await api.delete(`/${url}/${id}`);
-          console.log(response.data,"inii")
+        
           return response.data;
         },
         onError: (error) => {

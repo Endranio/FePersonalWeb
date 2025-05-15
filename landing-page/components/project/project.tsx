@@ -8,7 +8,7 @@ import { api } from "@/lib/api";
 export default async function Project() {
   const res = await api.get("/projects")
   const data = res.data
-  console.log(data);
+  
 
   return (
     <div id="project">

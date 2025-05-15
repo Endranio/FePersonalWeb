@@ -10,7 +10,7 @@ import "swiper/css";
 import type { TechStack } from "@/types/type";
 
 type Props={
-  techList:TechStack[]
+  techList?:TechStack[]
 }
 
 export default function TechCard({techList}:Props) {
@@ -32,11 +32,11 @@ export default function TechCard({techList}:Props) {
             480: { slidesPerView: 3 },
             640: { slidesPerView: 4 },
             768: { slidesPerView: 4},
-            1024: { slidesPerView: 2 },
-            1280: { slidesPerView: 2 },
+            1024: { slidesPerView: 6 },
+            1280: { slidesPerView: 6 },
           }}
         >
-          {techList.map((tech, index) => (
+          {techList?.map((tech, index) => (
   <SwiperSlide key={index}>
     <div className="inline-flex p-5 rounded-xl justify-center dark:bg-gray-800">
       <img src={tech.tech} alt={tech.name} className="w-10 h-10 object-contain" />

@@ -18,10 +18,11 @@ import { api } from "@/lib/api";
 import { useForm } from "react-hook-form";
 import { ProfileSchema, ProfileSchemaDTO } from "@/schema/profile-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Spinner from "./spiner";
 import axios from "axios";
 import { toast } from "sonner";
+import ImagePreview from "./image-preview";
 
 export default function CardEditProfile() {
 
@@ -29,7 +30,7 @@ export default function CardEditProfile() {
     queryKey:['edit-profile'],
     queryFn:async()=>{
       const res = await api.get("/profile")
-      console.log("response profile",res.data)
+     
       return res.data
     }
 
@@ -50,7 +51,7 @@ export default function CardEditProfile() {
     mutationKey:["edit-profile"],
     mutationFn: async(data:ProfileSchemaDTO)=>{
       let imageUrl = profile?.image
-      console.log("data mage",imageUrl)
+      
       if(data.image){
         const formData = new FormData()
         formData.append("image",data.image[0])
@@ -96,7 +97,7 @@ export default function CardEditProfile() {
   const onSubmit = async(data:ProfileSchemaDTO)=>{
    await mutateAsync(data)
   }
-
+const [file,setFile] = useState<File|null>(null)
   return (
     <Card>
       <CardHeader>
@@ -158,7 +159,13 @@ export default function CardEditProfile() {
         </div>
         <div className=" flex flex-col gap-2">
           <Label htmlFor="profile">Profile Picture</Label>
-          <Input id="profile" type="file" {...register("image")} />
+          <Input id="profile" type="file" {...register("image",{
+            onChange:(e)=>{
+              const selectedFile = e.target.files?.[0] || null
+              setFile(selectedFile)
+            }
+          })} />
+          <ImagePreview file={file} defaultPreview={profile?.image}/>
           <p className="text-red-500 text-sm">{errors.image?.message}</p>
         </div>
       </CardContent>

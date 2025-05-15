@@ -12,10 +12,15 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Textarea } from "../ui/textarea";
-import { useForm } from "react-hook-form";
-import { ProjectSchema, ProjectSchemaDTO } from "@/schema/project-schema";
+import { useFieldArray, useForm } from "react-hook-form";
+import {
+  FormProjectSchema,
+  FormProjectSchemaDTO,
+  ProjectSchema,
+  ProjectSchemaDTO,
+} from "@/schema/project-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import UseField from "../work-experience/hooks/use-field";
 import { RxCross1 } from "react-icons/rx";
@@ -24,17 +29,20 @@ import { api } from "@/lib/api";
 import axios from "axios";
 import { toast } from "sonner";
 import Spinner from "../ui/spiner";
+import ImagePreview from "../ui/image-preview";
 
 export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
   const {
     register,
+    unregister,
     formState: { errors },
     handleSubmit,
     watch,
     reset,
-  } = useForm<ProjectSchemaDTO>({
+    control,
+  } = useForm<FormProjectSchemaDTO>({
     mode: "onChange",
-    resolver: zodResolver(ProjectSchema),
+    resolver: zodResolver(FormProjectSchema),
   });
 
   const github = watch("isGithub", false);
@@ -45,19 +53,13 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
     mutationKey: ["add-project"],
     mutationFn: async (data: ProjectSchemaDTO) => {
       const formData = new FormData();
-     
+
       formData.append("image", data.image[0]);
 
       const imageResponse = await api.post("/upload", formData);
-     
+
       const projectData = {
-        title: data.title,
-        description: data.description,
-        tech: data.tech,
-        isGithub: data.isGithub,
-        isDemo: data.isDemo,
-        linkDemo: data.linkDemo ,
-        linkGithub: data.linkGithub ,
+        ...data,
         image: imageResponse.data.imageUrl,
       };
 
@@ -75,15 +77,36 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
       await queryClient.invalidateQueries({
         queryKey: ["projects"],
       });
-      reset()
+      reset();
       toast.success(data.message);
     },
   });
 
-  const onSubmit = async (data: ProjectSchemaDTO) => {
-    await mutateAsync(data);
+  const onSubmit = async (data: FormProjectSchemaDTO) => {
+    const transformData: ProjectSchemaDTO = {
+      ...data,
+      tech: data.tech.map((item) => item.value),
+    };
+    await mutateAsync(transformData);
   };
-  const { techs, handletech, handleDeleteTech } = UseField();
+
+  useEffect(() => {
+    if (fields.length === 0) {
+      append({ value: "" });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!github) {
+      unregister("linkGithub");
+    }
+    if (!demo) {
+      unregister("linkDemo");
+    }
+  }, [github, demo, unregister]);
+
+  const { append, fields, remove } = useFieldArray({ control, name: "tech" });
+  const [file, setFile] = useState<File | null>(null);
 
   return (
     <Dialog>
@@ -107,19 +130,19 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
           </div>
           <div className=" flex flex-col gap-2">
             <Label htmlFor="tech">Tech Stack</Label>
-            {techs.map((_, index) => (
-              <div className="flex gap-2" key={index}>
+            {fields.map((field, index) => (
+              <div className="flex gap-2" key={field.id}>
                 <Input
                   id="tech"
                   placeholder="React"
-                  {...register(`tech.${index}`)}
+                  {...register(`tech.${index}.value`)}
                 />
                 <p className="text-red-500 text-sm">{errors.tech?.message}</p>
                 {index !== 0 && (
                   <Button
                     className="w-[10%]"
                     variant="ghost"
-                    onClick={() => handleDeleteTech(index)}
+                    onClick={() => remove(index)}
                   >
                     <RxCross1 />
                   </Button>
@@ -128,9 +151,8 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
             ))}
             <Button
               className="w-[20%]"
-              onClick={(e) => {
-                e.preventDefault(), handletech();
-              }}
+              type="button"
+              onClick={() => append({ value: "" })}
             >
               Add tech
             </Button>
@@ -188,11 +210,23 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
           )}
           <div className=" flex flex-col gap-2">
             <Label htmlFor="company">Project Picture</Label>
-            <Input id="company" type="file" {...register("image")} />
+            <Input
+              id="company"
+              type="file"
+              {...register("image", {
+                onChange: (e) => {
+                  const selectedFile = e.target.files?.[0] || null;
+                  setFile(selectedFile);
+                },
+              })}
+            />
+            <ImagePreview file={file} />
             <p className="text-red-500 text-sm">{errors.image?.message}</p>
           </div>
           <DialogFooter>
-            <Button disabled={isPending} type="submit">{isPending?<Spinner/>:"Add"}</Button>
+            <Button disabled={isPending} type="submit">
+              {isPending ? <Spinner /> : "Add"}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

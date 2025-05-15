@@ -21,7 +21,6 @@ import { RxCross1 } from "react-icons/rx"
 import { ModeToggle } from "./mode-toggle"
 import Link from "next/link";
 
-// Menu items.
 const items : { title: string; url: string; icon: IconType }[] = [
   {
     title: "Profile",

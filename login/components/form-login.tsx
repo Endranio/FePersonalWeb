@@ -30,7 +30,7 @@ export default function FormLogin() {
     mutationKey: ["login"],
     mutationFn: async (data: LoginSchemaDTO) => {
       const res = await api.post("/login", data);
-      console.log(res.data.token);
+      
       Cookies.set("token", res.data.token, {
         expires: 1,
       });
@@ -38,7 +38,7 @@ export default function FormLogin() {
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
-        console.log("Full error:", error)
+      
         return toast.error(error.response?.data.message || "An error occurred") ;
       }
       toast.error("something wrong");

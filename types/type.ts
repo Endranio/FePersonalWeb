@@ -8,6 +8,16 @@ export type WorkExDTO={
     startDate:string
     endDate:string
 }
+export type WorkExFormDTO={
+    id:string
+    image:string
+    position:string
+    company:string
+    jobdesk:{value:string}[] 
+    tech:{value:string}[]
+    startDate:string
+    endDate:string
+}
 
 export type ProjectDTO={
     id:string

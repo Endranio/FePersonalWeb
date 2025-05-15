@@ -1,12 +1,19 @@
 import { WorkExDTO } from "@/types/type";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { useFieldArray, useForm, UseFormUnregister } from "react-hook-form";
 
-export default function UseField( defaultValuesJobs:string[] =[""] ,defaultValuesTech:string[] =[""] ){
-    const [jobs, setJobs] = useState( defaultValuesJobs);
-  const [techs, setTech] = useState( defaultValuesTech);
-
-  const {unregister,reset} = useForm()
+type UseFieldProps = {
+  defaultValuesJobs?: string[];
+  defaultValuesTech?: string[];
+  unregister?: UseFormUnregister<any>;
+};
+export default function UseField({
+  defaultValuesJobs = [""],
+  defaultValuesTech = [""],
+  unregister,
+}: UseFieldProps) {
+  const [jobs, setJobs] = useState(defaultValuesJobs);
+  const [techs, setTech] = useState(defaultValuesTech);
 
   const handlejobdesk = () => {
     setJobs([...jobs, ""]);
@@ -16,21 +23,29 @@ export default function UseField( defaultValuesJobs:string[] =[""] ,defaultValue
     setTech([...techs, ""]);
   };
   const handleDeleteJob = (index: number) => {
+    if (unregister) {
+      unregister(`tech.${index}`);
+    }
     const jobdesk = [...jobs];
     jobdesk.splice(index, 1);
     setJobs(jobdesk);
-    reset()
   };
 
   const handleDeleteTech = (index: number) => {
+    if (unregister) {
+      unregister(`tech.${index}`);
+    }
     const tech = [...techs];
     tech.splice(index, 1);
     setTech(tech);
-    unregister(`tech.${index}`)
   };
-  return{
-      handleDeleteJob,handleDeleteTech,handlejobdesk,handletech,jobs,techs
 
-  }
-  
+  return {
+    handleDeleteJob,
+    handleDeleteTech,
+    handlejobdesk,
+    handletech,
+    jobs,
+    techs,
+  };
 }

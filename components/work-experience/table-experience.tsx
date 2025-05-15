@@ -23,7 +23,7 @@ export function TableExperience() {
     queryKey: ["experience"],
     queryFn: async () => {
       const res = await api("/experience");
-      console.log(res.data,"ini experience");
+      
       return res.data;
     },
   });
@@ -72,9 +72,9 @@ export function TableExperience() {
               {work.jobdesk}
             </TableCell>
             <TableCell>
-              {work.startDate} to {work.endDate}
+              {work.startDate} - {work.endDate}
             </TableCell>
-            <TableCell className="  ">
+            <TableCell className="">
               <div className="flex gap-3 justify-end">
 
               <ModalEditExperience

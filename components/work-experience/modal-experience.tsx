@@ -13,12 +13,14 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ReactNode, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { Textarea } from "../ui/textarea";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import {
   AddExperienceSchema,
   AddExperienceSchemaDTO,
+  ExperienceSchema,
+  ExperienceSchemaDTO,
 } from "@/schema/experience-schema";
 
 import { RxCross1 } from "react-icons/rx";
@@ -29,6 +31,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import Spinner from "../ui/spiner";
 import { DialogClose } from "@radix-ui/react-dialog";
+import ImagePreview from "../ui/image-preview";
 
 export function ModalAddExperience({ trigger }: { trigger: ReactNode }) {
 
@@ -38,10 +41,11 @@ export function ModalAddExperience({ trigger }: { trigger: ReactNode }) {
     register,
     reset,
     handleSubmit,
+    control,
     formState: { errors },
-  } = useForm<AddExperienceSchemaDTO>({
+  } = useForm<ExperienceSchemaDTO>({
     mode: "onChange",
-    resolver: zodResolver(AddExperienceSchema),
+    resolver: zodResolver(ExperienceSchema),
   });
 
   const queryClient = useQueryClient()
@@ -75,12 +79,30 @@ export function ModalAddExperience({ trigger }: { trigger: ReactNode }) {
     }
   })
 
-  const onSubmit = async(data:AddExperienceSchemaDTO) => {
-    await mutateAsync(data)
+  const onSubmit = async(data:ExperienceSchemaDTO) => {
+    const transformData : AddExperienceSchemaDTO = {
+      ...data,
+      tech:data.tech.map((item)=> item.value),
+      jobdesk:data.jobdesk.map((item) => item.value)
+    }
+    await mutateAsync(transformData)
   }
 
-  const {handleDeleteJob,handleDeleteTech,handlejobdesk,handletech,jobs,techs} = UseField()
+  useEffect(()=>
+  {
+    if(fieldsTech.length === 0){
+      appendTech({value:""})
+    }
+    if(fieldJob.length === 0){
+      appendJob({value:""})
+    }
 
+  },[])
+
+  const {append:appendTech,remove:removeTech,fields:fieldsTech} = useFieldArray({control,name:"tech"})
+  const {append:appendJob,remove:removeJob,fields:fieldJob} = useFieldArray({control,name:"jobdesk"})
+  
+const [file,setFile] = useState<File | null>(null)
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -104,20 +126,21 @@ export function ModalAddExperience({ trigger }: { trigger: ReactNode }) {
           </div>
           <div className=" flex flex-col gap-2">
             <Label htmlFor="tech">Tech Stack</Label>
-            {techs.map((_, index) => (
-              <div key={index} className="flex gap-2">
+            {fieldsTech.map((field, index) => (
+              <div key={field.id} className="flex gap-2">
                 <Input
                   id="tech"
                   placeholder="React"
-                  {...register(`tech.${index}`)}
+                  {...register(`tech.${index}.value`)}
                 />
 
                 <p className="text-red-500 text-sm">{errors.tech?.message}</p>
                 {index !== 0 && (
                   <Button
+                  type="button"
                     variant="ghost"
                     onClick={() => {
-                      handleDeleteTech(index);
+                      removeTech(index);
                     }}
                   >
                     <RxCross1 />
@@ -125,23 +148,24 @@ export function ModalAddExperience({ trigger }: { trigger: ReactNode }) {
                 )}
               </div>
             ))}
-            <Button onClick={handletech} className="w-[20%]">
+            <Button onClick={()=>appendTech({value:""})} className="w-[20%]">
               AddTech
             </Button>
           </div>
           <div className=" flex flex-col gap-2">
             <Label htmlFor="description">Description</Label>
-            {jobs.map((_,index) => (
-              <div className="flex gap-2" key={index}>
+            {fieldJob.map((field,index) => (
+              <div className="flex gap-2" key={field.id}>
                 <Input
                   id="description"
                   placeholder="description"
-                  {...register(`jobdesk.${index}`)}
+                  {...register(`jobdesk.${index}.value`)}
                 />
                 {index !== 0 && (
                   <Button 
+                  type="button"
                     onClick={() => {
-                      handleDeleteJob(index);
+                      removeJob(index);
                     }}
                     variant="ghost"
                   >
@@ -151,7 +175,7 @@ export function ModalAddExperience({ trigger }: { trigger: ReactNode }) {
                 )}
               </div>
             ))}
-            <Button onClick={handlejobdesk} className="w-[20%]">
+            <Button onClick={()=>appendJob({value:""})} className="w-[20%]">
               Add job
             </Button>
 
@@ -181,8 +205,15 @@ export function ModalAddExperience({ trigger }: { trigger: ReactNode }) {
           </div>
           <div className=" flex flex-col gap-2">
             <Label htmlFor="company">Image</Label>
-            <Input id="company" type="file" {...register("image")} />
+            <Input id="company" type="file" {...register("image",{
+              onChange:(e)=>{
+                const selectedFile = e.target.files?.[0] || null
+                
+                setFile(selectedFile)
+              }
+            })} />
 
+            <ImagePreview file={file}/>
             <p className="text-red-500 text-sm">{errors.image?.message}</p>
           </div>
           <DialogFooter>
