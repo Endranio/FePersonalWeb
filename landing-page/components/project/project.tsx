@@ -12,7 +12,7 @@ export default async function Project() {
 
   return (
     <div id="project">
-      <h1 className="text-2xl md:text-3xl font-bold mb-32 pt-24">
+      <h1 className="text-2xl md:text-3xl font-bold mb-20 pt-15">
         My Project:
       </h1>
 

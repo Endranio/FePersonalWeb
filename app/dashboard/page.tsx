@@ -9,7 +9,7 @@ export default async function Dashboard() {
   
 
   return (
-    <SidebarProvider>
+    
       <div className="mt-4 flex flex-col w-full relative">
       
 
@@ -35,6 +35,6 @@ export default async function Dashboard() {
           </div>
         </div>
       </div>
-    </SidebarProvider>
+    
   );
 }

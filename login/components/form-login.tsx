@@ -39,7 +39,7 @@ export default function FormLogin() {
     onError: (error) => {
       if (axios.isAxiosError(error)) {
       
-        return toast.error(error.response?.data.message || "An error occurred") ;
+         toast.error(error.response?.data.message || "An error occurred") ;
       }
       toast.error("something wrong");
     },

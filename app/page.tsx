@@ -6,7 +6,6 @@ import TechStack from "../landing-page/components/tech-stack/tech-stack";
 import WorkExperience from "../landing-page/components/work-ex/work-ex";
 import Project from "../landing-page/components/project/project";
 import Footer from "../landing-page/components/footer/footer";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/ui/app-sidebar";
 
 export default function Home() {

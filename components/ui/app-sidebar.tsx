@@ -12,6 +12,7 @@ import {
 import { scroll } from "./app-navbar";
 import { Button } from "@/components/ui/button";
 import { RxCross1 } from "react-icons/rx";
+import Link from "next/link";
 
 export function AppSidebar() {
   const { setOpenMobile,setOpen } = useSidebar();
@@ -52,6 +53,9 @@ export function AppSidebar() {
                 <Button className="w-3/4 mx-auto rounded-full cursor-pointer">
                   Download CV
                 </Button>
+                <Link href="https://wa.me/62895326440809" className="w-3/4 bg-green-500 mx-auto rounded-full cursor-pointer">
+                  Whatsapp
+                </Link>
               </div>
             </SidebarMenu>
           </SidebarGroupContent>

@@ -16,7 +16,7 @@ queryFn: async () =>{
 }
 })
     return(
-        <div id="tech-stack" className="pt-28">
+        <div id="tech-stack" className="pt-15">
             <h1 className="text-2xl md:text-3xl font-bold mb-12">Tech Stack - Tools I Use Every Day</h1>
            
     <TechCard techList = {techList}/>

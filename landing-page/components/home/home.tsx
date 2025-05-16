@@ -10,7 +10,7 @@ export default async function HomePage() {
   const data: ProfileDTO = res.data;
 
   return (
-    <div className="flex flex-col lg:flex-row gap-20 text-left mt-35 items-center lg:items-right">
+    <div className="flex flex-col lg:flex-row gap-20 text-left mt-15 items-center lg:items-right">
       <div className=" w-[350px] lg:w-[1800px] h-[350px] rounded-xl overflow-hidden flex items-center">
         <img
           src={data.image}
