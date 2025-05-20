@@ -26,11 +26,11 @@ export default function FormLogin() {
 
   const router = useRouter();
 
-  const { mutateAsync,isPending } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationKey: ["login"],
     mutationFn: async (data: LoginSchemaDTO) => {
       const res = await api.post("/login", data);
-      
+
       Cookies.set("token", res.data.token, {
         expires: 1,
       });
@@ -38,20 +38,18 @@ export default function FormLogin() {
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
-      
-         toast.error(error.response?.data.message || "An error occurred") ;
+        return toast.error(error.response?.data.message);
       }
       toast.error("something wrong");
     },
     onSuccess: async (data) => {
       toast.success(data.message);
-
       router.push("/dashboard");
     },
   });
 
-  const onSubmit = handleSubmit(async(data: LoginSchemaDTO) => {
-   await mutateAsync(data);
+  const onSubmit = handleSubmit(async (data: LoginSchemaDTO) => {
+    await mutateAsync(data);
   });
 
   return (
@@ -74,7 +72,9 @@ export default function FormLogin() {
         />
         <p className="text-red-500 text-sm">{errors.password?.message}</p>
       </div>
-      <Button disabled={isPending} type="submit">{isPending?<Spinner/>:"Login"}</Button>
+      <Button disabled={isPending} type="submit">
+        {isPending ? <Spinner /> : "Login"}
+      </Button>
     </form>
   );
 }

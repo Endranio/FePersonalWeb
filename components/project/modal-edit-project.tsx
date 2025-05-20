@@ -73,13 +73,25 @@ export function ModalEditProject({
   const demo = watch("isDemo", false);
 
   useEffect(() => {
-    if (!github) {
-      unregister("linkGithub");
+    const linkGithub = async()=>{
+      if(!github){
+        unregister("linkGithub")
+      }
+      await api.patch(`/projects/${defaultValue.id}`,{linkGithub:null})
     }
-    if (!demo) {
-      unregister("linkDemo");
+
+
+    linkGithub()
+  }, [github]);
+
+useEffect(()=>{
+  const linkDemo = async()=>{
+    if(!demo){
+      unregister("linkDemo")
     }
-  }, [github, demo, unregister]);
+    await api.patch(`/projects/${defaultValue.id}`,{linkDemo:null})
+  }
+},[demo])
 
   const [file, setFile] = useState<File | null>(null);
   const queryClient = useQueryClient();
@@ -132,6 +144,9 @@ export function ModalEditProject({
     };
     await mutateAsync(transformData);
   };
+
+
+  
 
   return (
     <Dialog>

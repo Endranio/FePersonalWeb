@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { useFieldArray, useForm } from "react-hook-form";
 import {
@@ -30,6 +30,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import Spinner from "../ui/spiner";
 import ImagePreview from "../ui/image-preview";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
   const {
@@ -47,6 +48,8 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
 
   const github = watch("isGithub", false);
   const demo = watch("isDemo", false);
+
+  const closeRef = useRef<HTMLButtonElement>(null)
 
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation<any, Error, ProjectSchemaDTO>({
@@ -79,6 +82,7 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
       });
       reset();
       toast.success(data.message);
+      closeRef.current?.click()
     },
   });
 
@@ -227,6 +231,9 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
             <Button disabled={isPending} type="submit">
               {isPending ? <Spinner /> : "Add"}
             </Button>
+            <DialogClose asChild>
+              <Button ref={closeRef} hidden/>
+            </DialogClose>
           </DialogFooter>
         </form>
       </DialogContent>
