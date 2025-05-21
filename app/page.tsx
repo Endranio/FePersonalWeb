@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
+
+
 import Navbar from "../components/ui/app-navbar";
 import HomePage from "../landing-page/components/home/home";
 import TechStack from "../landing-page/components/tech-stack/tech-stack";

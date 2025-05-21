@@ -20,6 +20,9 @@ import {
 import { RxCross1 } from "react-icons/rx"
 import { ModeToggle } from "./mode-toggle"
 import Link from "next/link";
+import { Button } from "./button";
+import Cookies from 'js-cookie';
+import {useRouter} from "next/navigation"
 
 const items : { title: string; url: string; icon: IconType }[] = [
   {
@@ -47,6 +50,11 @@ const items : { title: string; url: string; icon: IconType }[] = [
 
 export function AppSidebarDashboard() {
     const {setOpen} = useSidebar()
+    const router = useRouter()
+    const logout = ()=>{
+      Cookies.remove("token")
+      router.push("/login")
+    }
   return (
     <Sidebar className="z-51">
       <SidebarContent>
@@ -67,6 +75,8 @@ export function AppSidebarDashboard() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+
+              <Button onClick={logout}>Logout</Button>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

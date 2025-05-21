@@ -14,7 +14,7 @@ import { TechStack } from "@/types/type";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
-import { AlertDelete } from "../ui/alert-delete";
+import { AlertDelete } from "../../ui/alert-delete";
 
 export function TableTech() {
   const { data: tech } = useQuery<TechStack[]>({
@@ -42,7 +42,12 @@ export function TableTech() {
             </TableCell>
             <TableCell>{invoice.name}</TableCell>
             <TableCell className="flex justify-end my-2 mr-3">
-              <AlertDelete invalidate="techs" id={invoice.id} url="techs" trigger={<FaRegTrashAlt />} />
+              <AlertDelete
+                invalidate="techs"
+                id={invoice.id}
+                url="techs"
+                trigger={<FaRegTrashAlt />}
+              />
             </TableCell>
           </TableRow>
         ))}

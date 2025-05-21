@@ -1,4 +1,4 @@
-import CardEditProfile from "@/components/ui/card-edit-profile";
+import CardEditProfile from "@/components/profile/components/card-edit-profile";
 
 export default function Profile() {
   return (

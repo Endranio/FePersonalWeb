@@ -1,4 +1,3 @@
-
 import {
   Table,
   TableBody,
@@ -11,11 +10,11 @@ import {
 } from "@/components/ui/table";
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 
-import { ModalEditExperience } from "../work-experience/modal-edit-experience";
+import { ModalEditExperience } from "./modal-edit-experience";
 import { useQuery } from "@tanstack/react-query";
 import { WorkExDTO } from "@/types/type";
 import { api } from "@/lib/api";
-import { AlertDelete } from "../ui/alert-delete";
+import { AlertDelete } from "../../ui/alert-delete";
 import { useState } from "react";
 
 export function TableExperience() {
@@ -23,11 +22,11 @@ export function TableExperience() {
     queryKey: ["experience"],
     queryFn: async () => {
       const res = await api("/experience");
-      
+
       return res.data;
     },
   });
-  
+
   return (
     <Table>
       <TableHeader>
@@ -53,19 +52,17 @@ export function TableExperience() {
               <p className="font-bold">{work.company}</p>
             </TableCell>
             <TableCell className="font-medium">{work.position}</TableCell>
-            <TableCell >
-
+            <TableCell>
               {" "}
               <div className="flex flex-wrap gap-2">
-
-              {work.tech.map((item, index) => (
-                <p
-                  key={index}
-                  className=" px-2 py-1 w-fit text-[12px] bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-transparent text-gray-600 dark:text-gray-400"
-                >
-                  {item}
-                </p>
-              ))}
+                {work.tech.map((item, index) => (
+                  <p
+                    key={index}
+                    className=" px-2 py-1 w-fit text-[12px] bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-transparent text-gray-600 dark:text-gray-400"
+                  >
+                    {item}
+                  </p>
+                ))}
               </div>
             </TableCell>
             <TableCell className="truncate max-w-[20px]">
@@ -76,15 +73,18 @@ export function TableExperience() {
             </TableCell>
             <TableCell className="">
               <div className="flex gap-3 justify-end">
-
-              <ModalEditExperience
-                defaultValues={work}
-                trigger={<FaRegEdit className="cursor-pointer" />}
-                
+                <ModalEditExperience
+                  defaultValues={work}
+                  trigger={<FaRegEdit className="cursor-pointer" />}
                 />
-                <AlertDelete invalidate="experience" url="experience" key="delete-experience" trigger={<FaRegTrashAlt />} id={work.id}/>
-              
-                </div>
+                <AlertDelete
+                  invalidate="experience"
+                  url="experience"
+                  key="delete-experience"
+                  trigger={<FaRegTrashAlt />}
+                  id={work.id}
+                />
+              </div>
             </TableCell>
           </TableRow>
         ))}

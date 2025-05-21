@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { ModalTech } from "@/components/tech-stack/modal-add-tech";
-import { TableTech } from "@/components/tech-stack/table-tech";
+import { ModalTech } from "@/components/tech-stack/components/modal-add-tech";
+import { TableTech } from "@/components/tech-stack/components/table-tech";
 
 export default function TechStack() {
   return (

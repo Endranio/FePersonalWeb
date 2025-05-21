@@ -10,99 +10,50 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ReactNode, useEffect, useRef, useState } from "react";
-import { Textarea } from "../ui/textarea";
-import { useFieldArray, useForm } from "react-hook-form";
-import {
-  AddExperienceSchema,
-  AddExperienceSchemaDTO,
-  ExperienceSchema,
-  ExperienceSchemaDTO,
-} from "@/schema/experience-schema";
+import { ReactNode, useEffect, useState } from "react";
+import { useFieldArray } from "react-hook-form";
 
 import { RxCross1 } from "react-icons/rx";
-import UseField from "./hooks/use-field";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/lib/api";
-import axios from "axios";
-import { toast } from "sonner";
-import Spinner from "../ui/spiner";
+
 import { DialogClose } from "@radix-ui/react-dialog";
-import ImagePreview from "../ui/image-preview";
+import ImagePreview from "../../ui/image-preview";
+import Spinner from "../../ui/spiner";
+import UseAddExperience from "../hooks/add-experience";
 
 export function ModalAddExperience({ trigger }: { trigger: ReactNode }) {
-
-  const closeRef = useRef<HTMLButtonElement>(null)
-
   const {
     register,
-    reset,
     handleSubmit,
+    errors,
     control,
-    formState: { errors },
-  } = useForm<ExperienceSchemaDTO>({
-    mode: "onChange",
-    resolver: zodResolver(ExperienceSchema),
-  });
+    isPending,
+    onSubmit,
+    closeRef,
+  } = UseAddExperience();
 
-  const queryClient = useQueryClient()
-  const {mutateAsync,isPending} = useMutation<any,Error,AddExperienceSchemaDTO>({
-    mutationKey:["add-experience"],
-    mutationFn: async(data:AddExperienceSchemaDTO)=>{
-      const formData= new FormData()
-      formData.append("image",data.image[0])
-      const imageUrl = await api.post("/upload",formData)
-
-      const experienceData = {
-        ...data,
-        image:imageUrl.data.imageUrl
-      }
-      const response =  await api.post("/experience",experienceData)
-      return response.data
-    },
-    onError:(error)=>{
-      if (axios.isAxiosError(error)){
-        return toast.error(error.response?.data.message)
-      }
-      toast.error("something wrong")
-    },
-    onSuccess: async(data)=>{
-      await queryClient.invalidateQueries({
-        queryKey:['experience']
-      })
-      reset()
-      toast.success(data.message)
-      closeRef.current?.click()
+  useEffect(() => {
+    if (fieldsTech.length === 0) {
+      appendTech({ value: "" });
     }
-  })
-
-  const onSubmit = async(data:ExperienceSchemaDTO) => {
-    const transformData : AddExperienceSchemaDTO = {
-      ...data,
-      tech:data.tech.map((item)=> item.value),
-      jobdesk:data.jobdesk.map((item) => item.value)
+    if (fieldJob.length === 0) {
+      appendJob({ value: "" });
     }
-    await mutateAsync(transformData)
-  }
+  }, []);
 
-  useEffect(()=>
-  {
-    if(fieldsTech.length === 0){
-      appendTech({value:""})
-    }
-    if(fieldJob.length === 0){
-      appendJob({value:""})
-    }
+  const {
+    append: appendTech,
+    remove: removeTech,
+    fields: fieldsTech,
+  } = useFieldArray({ control, name: "tech" });
+  const {
+    append: appendJob,
+    remove: removeJob,
+    fields: fieldJob,
+  } = useFieldArray({ control, name: "jobdesk" });
 
-  },[])
-
-  const {append:appendTech,remove:removeTech,fields:fieldsTech} = useFieldArray({control,name:"tech"})
-  const {append:appendJob,remove:removeJob,fields:fieldJob} = useFieldArray({control,name:"jobdesk"})
-  
-const [file,setFile] = useState<File | null>(null)
+  const [file, setFile] = useState<File | null>(null);
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -137,7 +88,7 @@ const [file,setFile] = useState<File | null>(null)
                 <p className="text-red-500 text-sm">{errors.tech?.message}</p>
                 {index !== 0 && (
                   <Button
-                  type="button"
+                    type="button"
                     variant="ghost"
                     onClick={() => {
                       removeTech(index);
@@ -148,13 +99,16 @@ const [file,setFile] = useState<File | null>(null)
                 )}
               </div>
             ))}
-            <Button onClick={()=>appendTech({value:""})} className="w-[20%]">
+            <Button
+              onClick={() => appendTech({ value: "" })}
+              className="w-[20%]"
+            >
               AddTech
             </Button>
           </div>
           <div className=" flex flex-col gap-2">
             <Label htmlFor="description">Description</Label>
-            {fieldJob.map((field,index) => (
+            {fieldJob.map((field, index) => (
               <div className="flex gap-2" key={field.id}>
                 <Input
                   id="description"
@@ -162,8 +116,8 @@ const [file,setFile] = useState<File | null>(null)
                   {...register(`jobdesk.${index}.value`)}
                 />
                 {index !== 0 && (
-                  <Button 
-                  type="button"
+                  <Button
+                    type="button"
                     onClick={() => {
                       removeJob(index);
                     }}
@@ -175,7 +129,10 @@ const [file,setFile] = useState<File | null>(null)
                 )}
               </div>
             ))}
-            <Button onClick={()=>appendJob({value:""})} className="w-[20%]">
+            <Button
+              onClick={() => appendJob({ value: "" })}
+              className="w-[20%]"
+            >
               Add job
             </Button>
 
@@ -205,21 +162,27 @@ const [file,setFile] = useState<File | null>(null)
           </div>
           <div className=" flex flex-col gap-2">
             <Label htmlFor="company">Image</Label>
-            <Input id="company" type="file" {...register("image",{
-              onChange:(e)=>{
-                const selectedFile = e.target.files?.[0] || null
-                
-                setFile(selectedFile)
-              }
-            })} />
+            <Input
+              id="company"
+              type="file"
+              {...register("image", {
+                onChange: (e) => {
+                  const selectedFile = e.target.files?.[0] || null;
 
-            <ImagePreview file={file}/>
+                  setFile(selectedFile);
+                },
+              })}
+            />
+
+            <ImagePreview file={file} />
             <p className="text-red-500 text-sm">{errors.image?.message}</p>
           </div>
           <DialogFooter>
-            <Button disabled={isPending} type="submit">{isPending?<Spinner/>:"Add"}</Button>
+            <Button disabled={isPending} type="submit">
+              {isPending ? <Spinner /> : "Add"}
+            </Button>
             <DialogClose asChild>
-              <Button ref={closeRef} className="hidden"/>
+              <Button ref={closeRef} className="hidden" />
             </DialogClose>
           </DialogFooter>
         </form>

@@ -12,63 +12,23 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { api } from "@/lib/api";
-import { AddTechSchema, AddTechSchemaDTO } from "@/schema/tech-schema";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-import { ReactNode, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import ImagePreview from "../ui/image-preview";
-
+import { ReactNode } from "react";
+import ImagePreview from "../../ui/image-preview";
+import UseAddTech from "../hooks/add-tech";
 
 export function ModalTech({ trigger }: { trigger: ReactNode }) {
-  const closeRef = useRef<HTMLButtonElement>(null);
-
   const {
     handleSubmit,
+    onSubmit,
+    errors,
     register,
-    formState: { errors },
-    reset,
-  } = useForm<AddTechSchemaDTO>({
-    mode: "onChange",
-    resolver: zodResolver(AddTechSchema),
-  });
+    file,
+    setFile,
+    isPending,
+    closeRef,
+  } = UseAddTech();
 
-  const queryClient = useQueryClient();
-  const { mutateAsync, isPending } = useMutation<any, Error, AddTechSchemaDTO>({
-    mutationKey: ["add-techs"],
-    mutationFn: async (data: AddTechSchemaDTO) => {
-      const formData = new FormData();
-      formData.append("name", data.name);
-      formData.append("tech", data.tech[0]);
-
-      const response = await api.post("/techs", formData);
-      return response.data;
-    },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        return toast.error(error.response?.data.message);
-      }
-
-      toast.error("something wrong");
-    },
-    onSuccess: async (data) => {
-      await queryClient.invalidateQueries({
-        queryKey: ["techs"],
-      });
-      toast.success(data.message);
-      closeRef.current?.click();
-      reset();
-    },
-  });
-
-  const onSubmit = async (data: AddTechSchemaDTO) => {
-    await mutateAsync(data);
-  };
-  const [file, setFile] = useState<File | null>(null);
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -98,7 +58,7 @@ export function ModalTech({ trigger }: { trigger: ReactNode }) {
               {...register("tech", {
                 onChange: (e) => {
                   const selectedFile = e.target.files?.[0] || null;
-                 
+
                   setFile(selectedFile);
                 },
               })}

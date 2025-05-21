@@ -12,115 +12,90 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ReactNode, useEffect, useRef, useState } from "react";
-import { Textarea } from "../ui/textarea";
-import { useFieldArray, useForm } from "react-hook-form";
-import {
-  FormProjectSchema,
-  FormProjectSchemaDTO,
-  ProjectSchema,
-  ProjectSchemaDTO,
-} from "@/schema/project-schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import UseField from "../work-experience/hooks/use-field";
-import { RxCross1 } from "react-icons/rx";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
-import axios from "axios";
-import { toast } from "sonner";
-import Spinner from "../ui/spiner";
-import ImagePreview from "../ui/image-preview";
+import { ProjectDTO } from "@/types/type";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { ReactNode, useEffect, useState } from "react";
+import { useFieldArray } from "react-hook-form";
+import { RxCross1 } from "react-icons/rx";
+import ImagePreview from "../../ui/image-preview";
+import Spinner from "../../ui/spiner";
+import { Textarea } from "../../ui/textarea";
+import UseEditProjects from "../hooks/edit-prjects";
 
-export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
+export function ModalEditProject({
+  trigger,
+  defaultValue,
+}: {
+  trigger: ReactNode;
+  defaultValue: ProjectDTO;
+}) {
   const {
+    onSubmit,
+    closeRef,
     register,
     unregister,
-    formState: { errors },
     handleSubmit,
-    watch,
-    reset,
+    errors,
     control,
-  } = useForm<FormProjectSchemaDTO>({
-    mode: "onChange",
-    resolver: zodResolver(FormProjectSchema),
-  });
+    github,
+    demo,
+    isPending,
+    reset,
+  } = UseEditProjects(defaultValue);
 
-  const github = watch("isGithub", false);
-  const demo = watch("isDemo", false);
+  useEffect(() => {
+    if (defaultValue) {
+      const techFields = defaultValue.tech.map((item) => ({ value: item }));
+      reset({
+        isDemo: defaultValue.isDemo,
+        description: defaultValue.description,
+        isGithub: defaultValue.isGithub,
 
-  const closeRef = useRef<HTMLButtonElement>(null)
+        tech: techFields,
 
-  const queryClient = useQueryClient();
-  const { mutateAsync, isPending } = useMutation<any, Error, ProjectSchemaDTO>({
-    mutationKey: ["add-project"],
-    mutationFn: async (data: ProjectSchemaDTO) => {
-      const formData = new FormData();
-
-      formData.append("image", data.image[0]);
-
-      const imageResponse = await api.post("/upload", formData);
-
-      const projectData = {
-        ...data,
-        image: imageResponse.data.imageUrl,
-      };
-
-      const response = await api.post("/projects", projectData);
-
-      return response.data;
-    },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        return toast.error(error.response?.data.message);
-      }
-      toast.error("something wrong");
-    },
-    onSuccess: async (data) => {
-      await queryClient.invalidateQueries({
-        queryKey: ["projects"],
+        title: defaultValue.title,
       });
-      reset();
-      toast.success(data.message);
-      closeRef.current?.click()
-    },
-  });
+      replace(techFields);
+    }
+  }, [defaultValue, reset]);
 
-  const onSubmit = async (data: FormProjectSchemaDTO) => {
-    const transformData: ProjectSchemaDTO = {
-      ...data,
-      tech: data.tech.map((item) => item.value),
+  useEffect(() => {
+    const linkGithub = async () => {
+      if (!github) {
+        unregister("linkGithub");
+      }
+      await api.patch(`/projects/${defaultValue.id}`, { linkGithub: null });
     };
-    await mutateAsync(transformData);
-  };
+
+    linkGithub();
+  }, [github]);
 
   useEffect(() => {
-    if (fields.length === 0) {
-      append({ value: "" });
-    }
-  }, []);
+    const linkDemo = async () => {
+      if (!demo) {
+        unregister("linkDemo");
+      }
+      await api.patch(`/projects/${defaultValue.id}`, { linkDemo: null });
 
-  useEffect(() => {
-    if (!github) {
-      unregister("linkGithub");
-    }
-    if (!demo) {
-      unregister("linkDemo");
-    }
-  }, [github, demo, unregister]);
+      linkDemo();
+    };
+  }, [demo]);
 
-  const { append, fields, remove } = useFieldArray({ control, name: "tech" });
   const [file, setFile] = useState<File | null>(null);
+
+  const { append, fields, remove, replace } = useFieldArray({
+    control,
+    name: "tech",
+  });
 
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px] max-h-[110vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Add New Project</DialogTitle>
-          <DialogDescription>
-            Add a new project to your portfolio
-          </DialogDescription>
+          <DialogTitle>Edit Project</DialogTitle>
+          <DialogDescription>Edit your project</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4 py-4">
           <div className=" flex flex-col gap-2">
@@ -130,22 +105,23 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
               placeholder="Fullstack Developer"
               {...register("title")}
             />
-            <p className="text-red-500 text-sm">{errors.title?.message}</p>
+            <p className="text-red-500 text-xs">{errors.title?.message}</p>
           </div>
           <div className=" flex flex-col gap-2">
             <Label htmlFor="tech">Tech Stack</Label>
             {fields.map((field, index) => (
-              <div className="flex gap-2" key={field.id}>
+              <div className="flex" key={field.id}>
                 <Input
                   id="tech"
                   placeholder="React"
                   {...register(`tech.${index}.value`)}
                 />
-                <p className="text-red-500 text-sm">{errors.tech?.message}</p>
+                <p className="text-red-500 text-xs">{errors.tech?.message}</p>
                 {index !== 0 && (
                   <Button
                     className="w-[10%]"
                     variant="ghost"
+                    type="button"
                     onClick={() => remove(index)}
                   >
                     <RxCross1 />
@@ -168,8 +144,10 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
               placeholder="description"
               {...register("description")}
             />
+            <p className="text-red-500 text-xs">
+              {errors.description?.message}
+            </p>
           </div>
-          <p className="text-red-500 text-sm">{errors.description?.message}</p>
           <div className="flex gap-5 w-full">
             <div className="w-1/2 mt-2 flex items-center gap-2">
               <Input
@@ -178,9 +156,11 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
                 className="w-4 h-4 accent-blue-600"
                 {...register("isGithub")}
               />
+
               <Label htmlFor="available" className="text-sm">
                 Github
               </Label>
+              <p className="text-red-500 text-xs">{errors.isGithub?.message}</p>
             </div>
 
             <div className="w-1/2 mt-2 flex items-center gap-2">
@@ -190,16 +170,22 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
                 className="w-4 h-4 accent-blue-600"
                 {...register("isDemo")}
               />
+
               <Label htmlFor="available" className="text-sm">
                 Live Demo
               </Label>
+              <p className="text-red-500 text-xs">{errors.isDemo?.message}</p>
             </div>
           </div>
           {github && (
             <div className=" flex flex-col gap-2">
               <Label htmlFor="link-github">Link Github</Label>
-              <Input id="link-github" {...register("linkGithub")} />
-              <p className="text-red-500 text-sm">
+              <Input
+                id="link-github"
+                {...register("linkGithub")}
+                defaultValue={defaultValue.linkGithub}
+              />
+              <p className="text-red-500 text-xs">
                 {errors.linkGithub?.message}
               </p>
             </div>
@@ -208,8 +194,12 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
           {demo && (
             <div className=" flex flex-col gap-2">
               <Label htmlFor="link-demo">Link Live Demo</Label>
-              <Input id="link-demo" {...register("linkDemo")} />
-              <p className="text-red-500 text-sm">{errors.linkDemo?.message}</p>
+              <Input
+                id="link-demo"
+                {...register("linkDemo")}
+                defaultValue={defaultValue.linkDemo}
+              />
+              <p className="text-red-500 text-xs">{errors.linkDemo?.message}</p>
             </div>
           )}
           <div className=" flex flex-col gap-2">
@@ -224,15 +214,17 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
                 },
               })}
             />
-            <ImagePreview file={file} />
-            <p className="text-red-500 text-sm">{errors.image?.message}</p>
+
+            <ImagePreview file={file} defaultPreview={defaultValue.image} />
+            <p className="text-red-500 text-xs">{errors.isGithub?.message}</p>
           </div>
+
           <DialogFooter>
             <Button disabled={isPending} type="submit">
-              {isPending ? <Spinner /> : "Add"}
+              {isPending ? <Spinner /> : "Save"}
             </Button>
             <DialogClose asChild>
-              <Button ref={closeRef} hidden/>
+              <Button ref={closeRef} hidden />
             </DialogClose>
           </DialogFooter>
         </form>

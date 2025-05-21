@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { ModalAddProject } from "@/components/project/modal-add-project";
-import { TableProject } from "@/components/project/table-project";
+import { ModalAddProject } from "@/components/project/components/modal-add-project";
+import { TableProject } from "@/components/project/components/table-project";
 
 export default function Project() {
   return (

@@ -1,9 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ModalAddExperience } from "@/components/work-experience/modal-experience";
+import { ModalAddExperience } from "@/components/work-experience/components/modal-experience";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { TableExperience } from "@/components/work-experience/table-experience";
+import { TableExperience } from "@/components/work-experience/components/table-experience";
 
 export default function WorkExperience() {
   return (

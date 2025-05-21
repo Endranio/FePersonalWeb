@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import {
   Table,
@@ -12,21 +12,20 @@ import {
 } from "@/components/ui/table";
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 
-import { ModalEditProject } from "../project/modal-edit-project";
+import { ModalEditProject } from "./modal-edit-project";
 import { useQuery } from "@tanstack/react-query";
 import { ProjectDTO } from "@/types/type";
 import { api } from "@/lib/api";
-import { AlertDelete } from "../ui/alert-delete";
-
+import { AlertDelete } from "../../ui/alert-delete";
 
 export function TableProject() {
-  const {data:projects,} = useQuery<ProjectDTO[]>({
-    queryKey:['projects'],
-    queryFn: async()=>{
-      const res = await api.get('/projects')
-      return res.data
-    }
-  })
+  const { data: projects } = useQuery<ProjectDTO[]>({
+    queryKey: ["projects"],
+    queryFn: async () => {
+      const res = await api.get("/projects");
+      return res.data;
+    },
+  });
   return (
     <Table>
       <TableHeader>
@@ -48,18 +47,17 @@ export function TableProject() {
               <img className="w-10" src={project.image} />
             </TableCell>
             <TableCell className="font-medium">{project.title}</TableCell>
-            <TableCell >
+            <TableCell>
               <div className="flex flex-wrap gap-2">
-
-              {" "}
-              {project.tech.map((item, index) => (
-                <p
-                  key={index}
-                  className="px-2 py-1 w-fit  text-[12px] bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-transparent text-gray-600 dark:text-gray-400"
-                >
-                  {item}
-                </p>
-              ))}
+                {" "}
+                {project.tech.map((item, index) => (
+                  <p
+                    key={index}
+                    className="px-2 py-1 w-fit  text-[12px] bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-transparent text-gray-600 dark:text-gray-400"
+                  >
+                    {item}
+                  </p>
+                ))}
               </div>
             </TableCell>
             <TableCell className="truncate max-w-[20px]">
@@ -74,12 +72,16 @@ export function TableProject() {
             </TableCell>
             <TableCell className="">
               <div className="flex justify-end gap-5">
-
-             <AlertDelete invalidate="projects"  id={project.id} url="projects" trigger={<FaRegTrashAlt />} />  
-              <ModalEditProject
-              defaultValue={project}
-              trigger={<FaRegEdit className="cursor-pointer" />}
-              />
+                <AlertDelete
+                  invalidate="projects"
+                  id={project.id}
+                  url="projects"
+                  trigger={<FaRegTrashAlt />}
+                />
+                <ModalEditProject
+                  defaultValue={project}
+                  trigger={<FaRegEdit className="cursor-pointer" />}
+                />
               </div>
             </TableCell>
           </TableRow>
