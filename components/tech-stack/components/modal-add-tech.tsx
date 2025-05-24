@@ -62,7 +62,7 @@ export function ModalTech({ trigger }: { trigger: ReactNode }) {
                   setFile(selectedFile);
                 },
               })}
-            />
+            /> 
             <ImagePreview file={file} />
             <p>{errors.tech?.message}</p>
           </div>

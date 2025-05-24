@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function WorkCard(work: WorkExDTO) {
   return (
-    <div className="sm:flex gap-20 bg-white dark:bg-gray-800 p-10 rounded-xl  ">
+    <div className="sm:flex gap-20 bg-white dark:bg-gray-800 p-10 rounded-xl mt-10 ">
       <div className="shrink-0 p-3">
         <img src={work.image} width={100} height={100} alt={"company"} />
       </div>
