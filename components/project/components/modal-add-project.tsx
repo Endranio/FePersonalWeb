@@ -33,6 +33,8 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
     github,
     demo,
     isPending,
+    setFile,
+    file
   } = UseAddProject();
 
   useEffect(() => {
@@ -51,7 +53,7 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
   }, [github, demo, unregister]);
 
   const { append, fields, remove } = useFieldArray({ control, name: "tech" });
-  const [file, setFile] = useState<File | null>(null);
+  // const onSubmit = (data:any) => {console.log(data)}
 
   return (
     <Dialog>

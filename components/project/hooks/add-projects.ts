@@ -3,7 +3,7 @@ import { FormProjectSchema, FormProjectSchemaDTO, ProjectSchemaDTO } from "@/sch
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -20,7 +20,7 @@ export default function UseAddProject(){
     mode: "onChange",
     resolver: zodResolver(FormProjectSchema),
   });
-
+const [file, setFile] = useState<File | null>(null);
   const github = watch("isGithub", false);
   const demo = watch("isDemo", false);
 
@@ -55,6 +55,7 @@ export default function UseAddProject(){
       await queryClient.invalidateQueries({
         queryKey: ["projects"],
       });
+      setFile(null)
       reset();
       toast.success(data.message);
       closeRef.current?.click()
@@ -79,7 +80,9 @@ export default function UseAddProject(){
         control,
         github,
         demo,
-        isPending
+        isPending,
+        setFile,
+        file
     }
     
     

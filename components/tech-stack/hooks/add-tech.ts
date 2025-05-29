@@ -19,7 +19,8 @@ export default function UseAddTech(){
     mode: "onChange",
     resolver: zodResolver(AddTechSchema),
   });
-
+  
+  const [file, setFile] = useState<File | null>(null);
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation<any, Error, AddTechSchemaDTO>({
     mutationKey: ["add-techs"],
@@ -42,6 +43,7 @@ export default function UseAddTech(){
       await queryClient.invalidateQueries({
         queryKey: ["techs"],
       });
+      setFile(null)
       toast.success(data.message);
       closeRef.current?.click();
       reset();
@@ -51,7 +53,6 @@ export default function UseAddTech(){
   const onSubmit = async (data: AddTechSchemaDTO) => {
     await mutateAsync(data);
   };
-  const [file, setFile] = useState<File | null>(null);
 
   return{
     handleSubmit,

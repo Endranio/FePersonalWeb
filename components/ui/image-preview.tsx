@@ -9,7 +9,9 @@ export default function ImagePreview({file ,defaultPreview} : Props) {
   const [preview, setPreview] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!file) return;
+    if (!file){
+      setPreview(null)
+      return;}
     const reader = new FileReader();
     reader.onloadend = () => {
       setPreview(reader.result as string);

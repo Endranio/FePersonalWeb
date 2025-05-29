@@ -5,7 +5,7 @@ import {
     ExperienceSchemaDTO
 } from "@/schema/experience-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
 
@@ -27,7 +27,7 @@ export default function UseAddExperience(){
     mode: "onChange",
     resolver: zodResolver(ExperienceSchema),
   });
-
+const [file, setFile] = useState<File | null>(null);
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation<
     any,
@@ -57,6 +57,7 @@ export default function UseAddExperience(){
       await queryClient.invalidateQueries({
         queryKey: ["experience"],
       });
+      setFile(null)
       reset();
       toast.success(data.message);
       closeRef.current?.click();
@@ -73,6 +74,6 @@ export default function UseAddExperience(){
   };
   return{
     register,handleSubmit,errors,control,
-    isPending,onSubmit,closeRef
+    isPending,onSubmit,closeRef,setFile,file
   }
 }

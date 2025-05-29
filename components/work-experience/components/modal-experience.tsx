@@ -31,6 +31,8 @@ export function ModalAddExperience({ trigger }: { trigger: ReactNode }) {
     isPending,
     onSubmit,
     closeRef,
+    file,
+    setFile
   } = UseAddExperience();
 
   useEffect(() => {
@@ -53,7 +55,7 @@ export function ModalAddExperience({ trigger }: { trigger: ReactNode }) {
     fields: fieldJob,
   } = useFieldArray({ control, name: "jobdesk" });
 
-  const [file, setFile] = useState<File | null>(null);
+  
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
