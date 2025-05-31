@@ -3,20 +3,19 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 
-import { ModalEditProject } from "./modal-edit-project";
-import { useQuery } from "@tanstack/react-query";
-import { ProjectDTO } from "@/types/type";
 import { api } from "@/lib/api";
+import { ProjectDTO } from "@/types/type";
+import { useQuery } from "@tanstack/react-query";
 import { AlertDelete } from "../../ui/alert-delete";
+import { ModalEditProject } from "./modal-edit-project";
+import Image from "next/image";
 
 export function TableProject() {
   const { data: projects } = useQuery<ProjectDTO[]>({
@@ -44,7 +43,7 @@ export function TableProject() {
           <TableRow key={index}>
             <TableCell>
               {" "}
-              <img className="w-10" src={project.image} />
+              <Image width={40} height={40} src={project.image} alt="image" />
             </TableCell>
             <TableCell className="font-medium">{project.title}</TableCell>
             <TableCell>

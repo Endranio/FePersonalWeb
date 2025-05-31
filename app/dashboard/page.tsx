@@ -4,11 +4,11 @@ import { api } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Dashboard() {
-  const { data, isPending } = useQuery<any>({
+  const { data} = useQuery({
     queryKey: ["dashboard"],
     queryFn: async () => {
       const res = await api.get("/dashboard");
-      console.log(res, "data");
+      
       return res.data;
     },
   });

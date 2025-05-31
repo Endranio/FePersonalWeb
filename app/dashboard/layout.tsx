@@ -10,21 +10,13 @@ import {
   QueryClientProvider,
   useQuery,
 } from "@tanstack/react-query";
-import { Geist, Geist_Mono } from "next/font/google";
+
 import { api } from "@/lib/api";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+
+import { useEffect } from "react";
 import Spinner from "@/components/ui/spiner";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 const queryClient = new QueryClient();
 export default function DashboardLayout({

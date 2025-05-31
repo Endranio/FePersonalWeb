@@ -1,5 +1,6 @@
 import { api } from "@/lib/api";
 import { FormProjectSchema, FormProjectSchemaDTO, ProjectSchemaDTO } from "@/schema/project-schema";
+import { ProjectResponse } from "@/types/response";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -27,7 +28,7 @@ const [file, setFile] = useState<File | null>(null);
     const closeRef = useRef<HTMLButtonElement>(null)
 
   const queryClient = useQueryClient();
-  const { mutateAsync, isPending } = useMutation<any, Error, ProjectSchemaDTO>({
+  const { mutateAsync, isPending } = useMutation<ProjectResponse, Error, ProjectSchemaDTO>({
     mutationKey: ["add-project"],
     mutationFn: async (data: ProjectSchemaDTO) => {
       const formData = new FormData();

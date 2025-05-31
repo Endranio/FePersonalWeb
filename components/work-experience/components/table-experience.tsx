@@ -1,21 +1,19 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 
-import { ModalEditExperience } from "./modal-edit-experience";
-import { useQuery } from "@tanstack/react-query";
-import { WorkExDTO } from "@/types/type";
 import { api } from "@/lib/api";
+import { WorkExDTO } from "@/types/type";
+import { useQuery } from "@tanstack/react-query";
 import { AlertDelete } from "../../ui/alert-delete";
-import { useState } from "react";
+import { ModalEditExperience } from "./modal-edit-experience";
+import Image from "next/image";
 
 export function TableExperience() {
   const { data: works } = useQuery<WorkExDTO[]>({
@@ -45,7 +43,7 @@ export function TableExperience() {
           <TableRow key={index}>
             <TableCell>
               {" "}
-              <img className="w-10" src={work.image} />
+              <Image width={40} height={40} src={work.image} alt="image" />
             </TableCell>
             <TableCell>
               {" "}

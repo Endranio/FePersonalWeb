@@ -1,5 +1,6 @@
 import { api } from "@/lib/api";
 import { AddTechSchema, AddTechSchemaDTO } from "@/schema/tech-schema";
+import { TechResponse } from "@/types/response";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -22,7 +23,7 @@ export default function UseAddTech(){
   
   const [file, setFile] = useState<File | null>(null);
   const queryClient = useQueryClient();
-  const { mutateAsync, isPending } = useMutation<any, Error, AddTechSchemaDTO>({
+  const { mutateAsync, isPending } = useMutation<TechResponse, Error, AddTechSchemaDTO>({
     mutationKey: ["add-techs"],
     mutationFn: async (data: AddTechSchemaDTO) => {
       const formData = new FormData();

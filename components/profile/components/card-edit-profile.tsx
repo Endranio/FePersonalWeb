@@ -26,7 +26,7 @@ export default function CardEditProfile() {
     setFile,
     profile} = UseEditProfile()
 
-    console.log(errors,"ini error")
+    
   return (
     <Card>
       <CardHeader>

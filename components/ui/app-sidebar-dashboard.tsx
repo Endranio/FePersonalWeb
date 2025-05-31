@@ -2,10 +2,6 @@
 
 
 
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
-import { RiStackLine,RiBriefcaseLine ,RiFolderLine} from "react-icons/ri"
-import { CgProfile } from "react-icons/cg";;
-import {IconType} from "react-icons"
 import {
   Sidebar,
   SidebarContent,
@@ -16,13 +12,17 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
-import { RxCross1 } from "react-icons/rx"
-import { ModeToggle } from "./mode-toggle"
-import Link from "next/link";
-import { Button } from "./button";
+} from "@/components/ui/sidebar";
 import Cookies from 'js-cookie';
-import {useRouter} from "next/navigation"
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { IconType } from "react-icons";
+import { CgProfile } from "react-icons/cg";
+import { RiBriefcaseLine, RiFolderLine, RiStackLine } from "react-icons/ri";
+import { RxCross1 } from "react-icons/rx";
+import { Button } from "./button";
+import { ModeToggle } from "./mode-toggle";
+;
 
 const items : { title: string; url: string; icon: IconType }[] = [
   {

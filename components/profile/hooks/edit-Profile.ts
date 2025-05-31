@@ -2,6 +2,7 @@
 
 import { api } from "@/lib/api";
 import { ProfileSchema, ProfileSchemaDTO } from "@/schema/profile-schema";
+import { ProfileResponse } from "@/types/response";
 import { ProfileDTO } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -32,7 +33,7 @@ export default function UseEditProfile() {
 
   const queryClient = useQueryClient();
 
-  const { mutateAsync, isPending } = useMutation<any, Error, ProfileSchemaDTO>({
+  const { mutateAsync, isPending } = useMutation<ProfileResponse, Error, ProfileSchemaDTO>({
     mutationKey: ["edit-profile"],
     mutationFn: async (data: ProfileSchemaDTO) => {
       let imageUrl = profile?.image;

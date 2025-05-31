@@ -4,12 +4,13 @@ import {
   FormProjectSchemaDTO,
   ProjectSchemaDTO,
 } from "@/schema/project-schema";
+import { ProjectResponse } from "@/types/response";
 import { ProjectDTO } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useRef } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 export default function UseEditProjects(defaultValue: ProjectDTO) {
@@ -30,7 +31,7 @@ export default function UseEditProjects(defaultValue: ProjectDTO) {
   const github = watch("isGithub", false);
   const demo = watch("isDemo", false);
   const queryClient = useQueryClient();
-  const { mutateAsync, isPending } = useMutation<any, Error, ProjectSchemaDTO>({
+  const { mutateAsync, isPending } = useMutation<ProjectResponse, Error, ProjectSchemaDTO>({
     mutationKey: ["edit-project"],
     mutationFn: async (data: ProjectSchemaDTO) => {
       let imageUrl = defaultValue.image;

@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 
 type Props ={
@@ -24,6 +25,8 @@ if(!preview && !defaultPreview){
     return null
 }
   return  (
+    
+    // eslint-disable-next-line @next/next/no-img-element
     <img src={preview || defaultPreview } alt="Preview" style={{ maxWidth: "200px" }} />
   ) 
 }

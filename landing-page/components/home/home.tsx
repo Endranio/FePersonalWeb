@@ -15,6 +15,7 @@ export default function HomePage() {
      queryKey:["profile"],
      queryFn: async()=>{
        const res = await api.get("/profile");
+       
        return res.data
 
      }

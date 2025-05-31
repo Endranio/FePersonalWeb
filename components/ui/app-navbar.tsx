@@ -54,7 +54,7 @@ export default function Navbar() {
             {" "}
             <FaWhatsapp />
             <a href="https://wa.me/62895326440809" target="_blank">
-              Let's Talk{" "}
+              Let us Talk{" "}
             </a>
           </Button>
           <Button>

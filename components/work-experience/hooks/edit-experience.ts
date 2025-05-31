@@ -4,6 +4,7 @@ import {
     ExperienceSchema,
     ExperienceSchemaDTO
 } from "@/schema/experience-schema";
+import { WorkExResponse } from "@/types/response";
 import { WorkExDTO } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -26,6 +27,21 @@ export default function UseEditExperience(defaultValues:WorkExDTO){
 
   const closeRef = useRef<HTMLButtonElement>(null);
 
+const {
+    fields: techFields,
+    append: appendTech,
+    remove: removeTech,
+    replace: replaceTech,
+  } = useFieldArray({ control, name: "tech" });
+
+  const {
+    fields: jobFields,
+    append: appendJob,
+    remove: removeJob,
+    replace: replaceJobs,
+  } = useFieldArray({ control, name: "jobdesk" });
+
+
   useEffect(() => {
     if (defaultValues) {
       const techFields = defaultValues.tech.map((item) => ({ value: item }));
@@ -41,14 +57,14 @@ export default function UseEditExperience(defaultValues:WorkExDTO){
         startDate: defaultValues.startDate,
         endDate: defaultValues.endDate,
       });
-      replaceTech(techFields), replaceJobs(jobdeskFields);
+      replaceTech(techFields); replaceJobs(jobdeskFields);
     }
-  }, [defaultValues, reset]);
+  }, [defaultValues, reset,replaceTech,replaceJobs]);
 
   const queryClient = useQueryClient();
 
   const { mutateAsync, isPending } = useMutation<
-    any,
+    WorkExResponse,
     Error,
     EditExperienceSchemaDTO
   >({
@@ -97,19 +113,7 @@ export default function UseEditExperience(defaultValues:WorkExDTO){
     mutateAsync(transformData);
   };
 
-  const {
-    fields: techFields,
-    append: appendTech,
-    remove: removeTech,
-    replace: replaceTech,
-  } = useFieldArray({ control, name: "tech" });
-
-  const {
-    fields: jobFields,
-    append: appendJob,
-    remove: removeJob,
-    replace: replaceJobs,
-  } = useFieldArray({ control, name: "jobdesk" });
+  
   const [file, setFile] = useState<File | null>(null);
 
   return{

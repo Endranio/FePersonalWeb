@@ -13,6 +13,7 @@ import { api } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
+import { WorkExResponse } from "@/types/response";
 
 export default function UseAddExperience(){
      const closeRef = useRef<HTMLButtonElement>(null);
@@ -30,7 +31,7 @@ export default function UseAddExperience(){
 const [file, setFile] = useState<File | null>(null);
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation<
-    any,
+    WorkExResponse,
     Error,
     AddExperienceSchemaDTO
   >({

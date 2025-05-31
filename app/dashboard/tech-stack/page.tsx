@@ -16,7 +16,7 @@ export default function TechStack() {
       <div className="mt-10">
         <h1 className="font-bold">Your Tech Stack</h1>
         <p className="text-[16px] mb-5">
-          Technologies you've added to your portfolio
+          Technologies you have added to your portfolio
         </p>
         <TableTech />
       </div>

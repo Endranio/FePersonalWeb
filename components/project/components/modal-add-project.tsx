@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
 import { useFieldArray } from "react-hook-form";
 import { RxCross1 } from "react-icons/rx";
 import ImagePreview from "../../ui/image-preview";
@@ -41,7 +41,8 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
     if (fields.length === 0) {
       append({ value: "" });
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[]);
 
   useEffect(() => {
     if (!github) {
@@ -53,7 +54,7 @@ export function ModalAddProject({ trigger }: { trigger: ReactNode }) {
   }, [github, demo, unregister]);
 
   const { append, fields, remove } = useFieldArray({ control, name: "tech" });
-  // const onSubmit = (data:any) => {console.log(data)}
+  
 
   return (
     <Dialog>

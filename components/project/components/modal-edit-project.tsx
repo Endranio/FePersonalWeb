@@ -43,7 +43,11 @@ export function ModalEditProject({
     isPending,
     reset,
   } = UseEditProjects(defaultValue);
-
+  
+  const { append, fields, remove, replace } = useFieldArray({
+    control,
+    name: "tech",
+  });
   useEffect(() => {
     if (defaultValue) {
       const techFields = defaultValue.tech.map((item) => ({ value: item }));
@@ -58,7 +62,8 @@ export function ModalEditProject({
       });
       replace(techFields);
     }
-  }, [defaultValue, reset]);
+    
+  }, [defaultValue, reset,replace]);
 
   useEffect(() => {
     const linkGithub = async () => {
@@ -69,7 +74,7 @@ export function ModalEditProject({
     };
 
     linkGithub();
-  }, [github]);
+  }, [github,unregister,defaultValue.id]);
 
   useEffect(() => {
     const linkDemo = async () => {
@@ -78,16 +83,12 @@ export function ModalEditProject({
       }
       await api.patch(`/projects/${defaultValue.id}`, { linkDemo: null });
 
-      linkDemo();
     };
-  }, [demo]);
+    linkDemo();
+  }, [demo,unregister,defaultValue.id]);
 
   const [file, setFile] = useState<File | null>(null);
 
-  const { append, fields, remove, replace } = useFieldArray({
-    control,
-    name: "tech",
-  });
 
   return (
     <Dialog>
@@ -151,13 +152,13 @@ export function ModalEditProject({
           <div className="flex gap-5 w-full">
             <div className="w-1/2 mt-2 flex items-center gap-2">
               <Input
-                id="available"
+                id="github"
                 type="checkbox"
                 className="w-4 h-4 accent-blue-600"
                 {...register("isGithub")}
               />
 
-              <Label htmlFor="available" className="text-sm">
+              <Label htmlFor="github" className="text-sm">
                 Github
               </Label>
               <p className="text-red-500 text-xs">{errors.isGithub?.message}</p>
@@ -165,13 +166,13 @@ export function ModalEditProject({
 
             <div className="w-1/2 mt-2 flex items-center gap-2">
               <Input
-                id="available"
+                id="demo"
                 type="checkbox"
                 className="w-4 h-4 accent-blue-600"
                 {...register("isDemo")}
               />
 
-              <Label htmlFor="available" className="text-sm">
+              <Label htmlFor="demo" className="text-sm">
                 Live Demo
               </Label>
               <p className="text-red-500 text-xs">{errors.isDemo?.message}</p>

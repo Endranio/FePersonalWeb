@@ -3,24 +3,24 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
-import { TechStack } from "@/types/type";
-import { FaRegTrashAlt } from "react-icons/fa";
-import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
+import { TechStack } from "@/types/type";
+import { useQuery } from "@tanstack/react-query";
+import { FaRegTrashAlt } from "react-icons/fa";
 import { AlertDelete } from "../../ui/alert-delete";
+import Image from "next/image";
 
 export function TableTech() {
   const { data: tech } = useQuery<TechStack[]>({
     queryKey: ["techs"],
     queryFn: async () => {
       const res = await api("/techs");
+      console.log(res.data)
 
       return res.data;
     },
@@ -38,7 +38,7 @@ export function TableTech() {
         {tech?.map((invoice, index) => (
           <TableRow key={index}>
             <TableCell>
-              <img className="w-10" src={invoice.tech} />
+              <Image width={40} height={40} src={invoice.tech} alt="image"/>
             </TableCell>
             <TableCell>{invoice.name}</TableCell>
             <TableCell className="flex justify-end my-2 mr-3">

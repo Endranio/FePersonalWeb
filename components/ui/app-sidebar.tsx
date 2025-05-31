@@ -21,14 +21,14 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="flex justify-end ">
-            <RxCross1 onClick={()=>{setOpenMobile(false),setOpen(false)}} />
+            <RxCross1 onClick={()=>{setOpenMobile(false);setOpen(false)}} />
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <div className="flex flex-col gap-3">
                 <p
                   onClick={() => {
-                    scroll("tech-stack"), setOpenMobile(false),setOpen(false);
+                    scroll("tech-stack"); setOpenMobile(false);setOpen(false);
                   }}
                   className="cursor-pointer hover:text-blue-400 text-lg"
                 >
@@ -36,7 +36,7 @@ export function AppSidebar() {
                 </p>
                 <p
                   onClick={() => {
-                    scroll("work-ex"), setOpenMobile(false),setOpen(false);
+                    scroll("work-ex"); setOpenMobile(false);setOpen(false);
                   }}
                   className="cursor-pointer hover:text-blue-400 text-lg"
                 >
@@ -44,7 +44,7 @@ export function AppSidebar() {
                 </p>
                 <p
                   onClick={() => {
-                    scroll("project"), setOpenMobile(false),setOpen(false);
+                    scroll("project"); setOpenMobile(false);setOpen(false);
                   }}
                   className="cursor-pointer hover:text-blue-400 text-lg"
                 >

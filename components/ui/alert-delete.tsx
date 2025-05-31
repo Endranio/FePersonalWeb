@@ -1,23 +1,22 @@
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-  } from "@/components/ui/alert-dialog"
-  import { Button } from "@/components/ui/button"
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { api } from "@/lib/api";
 import { DeleteSchemaDTO } from "@/schema/tech-schema";
-import { TechStack } from "@/types/type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { ReactNode } from "react"
+import { ReactNode } from "react";
 import { toast } from "sonner";
 import Spinner from "./spiner";
+import { DeleteResponse } from "@/types/response";
   
 type Delete={
   id:string,
@@ -31,7 +30,7 @@ type Delete={
 
     const queryClient = useQueryClient();
       const { mutateAsync, isPending } = useMutation<
-        any,
+        DeleteResponse,
         Error,
         DeleteSchemaDTO
       >({

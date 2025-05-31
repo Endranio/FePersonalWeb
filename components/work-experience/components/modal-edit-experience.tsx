@@ -10,24 +10,12 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ReactNode, useEffect, useRef, useState } from "react";
-import {
-  EditExperienceSchema,
-  EditExperienceSchemaDTO,
-  ExperienceSchema,
-  ExperienceSchemaDTO,
-} from "@/schema/experience-schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { WorkExDTO, WorkExFormDTO } from "@/types/type";
-import { api } from "@/lib/api";
-import { RxCross1 } from "react-icons/rx";
-import Spinner from "../../ui/spiner";
-import axios from "axios";
-import { toast } from "sonner";
+import { WorkExDTO } from "@/types/type";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { ReactNode } from "react";
+import { RxCross1 } from "react-icons/rx";
 import ImagePreview from "../../ui/image-preview";
+import Spinner from "../../ui/spiner";
 import UseEditExperience from "../hooks/edit-experience";
 
 type EditExperianceProps = {

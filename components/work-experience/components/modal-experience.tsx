@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
 import { useFieldArray } from "react-hook-form";
 
 import { RxCross1 } from "react-icons/rx";
@@ -34,16 +34,7 @@ export function ModalAddExperience({ trigger }: { trigger: ReactNode }) {
     file,
     setFile
   } = UseAddExperience();
-
-  useEffect(() => {
-    if (fieldsTech.length === 0) {
-      appendTech({ value: "" });
-    }
-    if (fieldJob.length === 0) {
-      appendJob({ value: "" });
-    }
-  }, []);
-
+  
   const {
     append: appendTech,
     remove: removeTech,
@@ -54,6 +45,15 @@ export function ModalAddExperience({ trigger }: { trigger: ReactNode }) {
     remove: removeJob,
     fields: fieldJob,
   } = useFieldArray({ control, name: "jobdesk" });
+  useEffect(() => {
+    if (fieldsTech.length === 0) {
+      appendTech({ value: "" });
+    }
+    if (fieldJob.length === 0) {
+      appendJob({ value: "" });
+    }
+  }, [appendJob,appendTech,fieldJob.length,fieldsTech.length]);
+
 
   
   return (
