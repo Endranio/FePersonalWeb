@@ -1,14 +1,19 @@
-import Link from "next/link";
-import ProjectCard from "./project-card";
-import { FaWhatsapp } from "react-icons/fa";
-import { MdEmail } from "react-icons/md";
-import { ProjectDTO } from "@/types/type";
-import { api } from "@/lib/api";
+"use client"
 
-export default async function Project() {
-  const res = await api.get("/projects")
-  const data = res.data
-  
+import { api } from "@/lib/api";
+import { ProjectDTO } from "@/types/type";
+import { useQuery } from "@tanstack/react-query";
+import ProjectCard from "./project-card";
+
+export default  function Project() {
+ 
+  const {data} = useQuery({
+    queryKey:["project"],
+    queryFn: async()=>{
+      const res = await api.get("/projects")
+      return res.data
+    }
+  })
 
   return (
     <div id="project">

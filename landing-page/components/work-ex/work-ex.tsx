@@ -1,10 +1,19 @@
+"use client"
+
 import { WorkExDTO } from "@/types/type";
 import WorkCard from "./work-ex-card";
 import { api } from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
 
 export default async function WorkExperience() {
-  const res = await api.get("/experience");
-  const data = res.data;
+  
+  const {data} = useQuery({
+    queryKey:["work-ex"],
+    queryFn:async()=>{
+      const res = await api.get("/Experience")
+      return res.data
+    }
+  })
 
   return (
     <div id="work-ex">
