@@ -4,16 +4,21 @@ import { api } from "@/lib/api";
 import { ProjectDTO } from "@/types/type";
 import { useQuery } from "@tanstack/react-query";
 import ProjectCard from "./project-card";
+import Spinner from "@/components/ui/spiner";
 
 export default  function Project() {
  
-  const {data} = useQuery({
+  const {data,isPending} = useQuery({
     queryKey:["project"],
     queryFn: async()=>{
       const res = await api.get("/projects")
       return res.data
     }
   })
+
+  if(isPending){
+    return<Spinner/>
+  }
 
   return (
     <div id="project">

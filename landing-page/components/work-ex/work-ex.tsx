@@ -4,16 +4,23 @@ import { WorkExDTO } from "@/types/type";
 import WorkCard from "./work-ex-card";
 import { api } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
+import Spinner from "@/components/ui/spiner";
 
-export default async function WorkExperience() {
+export default function WorkExperience() {
   
-  const {data} = useQuery({
+  const {data,isLoading} = useQuery({
     queryKey:["work-ex"],
     queryFn:async()=>{
-      const res = await api.get("/Experience")
+      const res = await api.get("/experience")
+      console.log(res.data);
+      
       return res.data
     }
   })
+
+  if(isLoading){
+    return<Spinner/>
+  }
 
   return (
     <div id="work-ex">
