@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 
 
 export const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL
+    baseURL: "https://benewpersolanweb-production.up.railway.app"
 })
 api.interceptors.request.use(
   (config) => {
