@@ -5,6 +5,8 @@ WORKDIR /app
 
 COPY . .
 
+COPY .env .env
+
 RUN npm install --legacy-peer-deps
 RUN npm run build
 
