@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 
 
 export const api = axios.create({
-    baseURL: "https://be-new-persolan-web.vercel.app/"
+    baseURL: "https://be-new-persolan-web.vercel.app"
 })
 api.interceptors.request.use(
   (config) => {
