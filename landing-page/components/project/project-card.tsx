@@ -7,7 +7,7 @@ import { FaExternalLinkAlt, FaGithub } from "react-icons/fa";
 export default function ProjectCard(project: ProjectDTO) {
   return (
     <div className="bg-white dark:bg-gray-900 rounded-xl shadow-md flex flex-col h-full">
-      <div className="bg-gray-100 dark:bg-gray-800 flex items-center justify-center h-[300] rounded-t-xl">
+      <div className="bg-gray-100 dark:bg-gray-800 flex items-center justify-center h-[200] rounded-t-xl">
         <img src={project.image} width={400} className="h-full" alt="project" />
       </div>
       <div className="flex flex-col gap-8 flex-grow bg-white dark:bg-gray-900 p-10 rounded-b-xl">
@@ -29,7 +29,7 @@ export default function ProjectCard(project: ProjectDTO) {
         <div className="flex gap-5 mt-auto">
           {project.isGithub ? (
             <Link
-              href={project.linkGithub}
+              href={project.linkGithub || ""}
               className="text-sm flex gap-1 items-center text-blue-500"
             >
               <FaGithub className="w-4 h-4" />
@@ -44,7 +44,7 @@ export default function ProjectCard(project: ProjectDTO) {
           {project.isDemo ? (
             <Link
               className="text-sm text-blue-500 flex gap-1 items-center"
-              href={project.linkDemo}
+              href={project.linkDemo || ""}
             >
               <FaExternalLinkAlt className="w-4 h-4" />
               Live Demo

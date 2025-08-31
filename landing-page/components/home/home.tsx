@@ -8,6 +8,7 @@ import { api } from "@/lib/api";
 import { ProfileDTO } from "@/types/type";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "@/components/ui/spiner";
+import Link from "next/link";
 
 export default function HomePage() {
 
@@ -62,10 +63,12 @@ export default function HomePage() {
               Let's Talk
             </a>
           </Button>
+          <Link href={data?.cv || ""} target="_blank" download>
           <Button>
             <IoMdDownload />
             Download CV
           </Button>
+          </Link>
         </div>
       </div>
     </div>
