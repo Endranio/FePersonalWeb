@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { api } from "@/lib/api";
 import { ProjectDTO } from "@/types/type";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { ReactNode, useEffect, useState } from "react";
@@ -34,7 +33,7 @@ export function ModalEditProject({
     onSubmit,
     closeRef,
     register,
-    unregister,
+
     handleSubmit,
     errors,
     control,
@@ -43,7 +42,7 @@ export function ModalEditProject({
     isPending,
     reset,
   } = UseEditProjects(defaultValue);
-  
+
   const { append, fields, remove, replace } = useFieldArray({
     control,
     name: "tech",
@@ -62,33 +61,9 @@ export function ModalEditProject({
       });
       replace(techFields);
     }
-    
-  }, [defaultValue, reset,replace]);
-
-  useEffect(() => {
-    const linkGithub = async () => {
-      if (!github) {
-        unregister("linkGithub");
-      }
-      await api.patch(`/projects/${defaultValue.id}`, { linkGithub: null });
-    };
-
-    linkGithub();
-  }, [github,unregister,defaultValue.id]);
-
-  useEffect(() => {
-    const linkDemo = async () => {
-      if (!demo) {
-        unregister("linkDemo");
-      }
-      await api.patch(`/projects/${defaultValue.id}`, { linkDemo: null });
-
-    };
-    linkDemo();
-  }, [demo,unregister,defaultValue.id]);
+  }, [defaultValue, reset, replace]);
 
   const [file, setFile] = useState<File | null>(null);
-
 
   return (
     <Dialog>

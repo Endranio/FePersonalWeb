@@ -8,7 +8,7 @@ import Image from "next/image";
 export default function ProjectCard(project: ProjectDTO) {
   return (
     <div className="bg-white dark:bg-gray-900 rounded-xl shadow-md flex flex-col h-full">
-      <div className="bg-gray-100 dark:bg-gray-800 flex items-center justify-center h-[200] rounded-t-xl">
+      <div className="bg-gray-100 dark:bg-gray-800 flex items-center justify-center h-[200px] rounded-t-xl">
         <Image src={project.image} height={200} width={400} className="h-full" alt="project" />
       </div>
       <div className="flex flex-col gap-8 flex-grow bg-white dark:bg-gray-900 p-10 rounded-b-xl">
@@ -32,6 +32,7 @@ export default function ProjectCard(project: ProjectDTO) {
             <Link
               href={project.linkGithub || ""}
               className="text-sm flex gap-1 items-center text-blue-500"
+              target="_blank"
             >
               <FaGithub className="w-4 h-4" />
               View On Repository
@@ -46,6 +47,7 @@ export default function ProjectCard(project: ProjectDTO) {
             <Link
               className="text-sm text-blue-500 flex gap-1 items-center"
               href={project.linkDemo || ""}
+              target="_blank"
             >
               <FaExternalLinkAlt className="w-4 h-4" />
               Live Demo

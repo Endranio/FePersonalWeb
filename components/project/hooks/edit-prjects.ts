@@ -70,10 +70,13 @@ export default function UseEditProjects(defaultValue: ProjectDTO) {
 
   const onSubmit = async (data: FormProjectSchemaDTO) => {
     const transformData: ProjectSchemaDTO = {
-      ...data,
-      tech: data.tech.map((item) => item.value),
-    };
-    await mutateAsync(transformData);
+    ...data,
+    tech: data.tech.map((item) => item.value),
+    linkGithub: data.isGithub ? data.linkGithub : "",
+    linkDemo: data.isDemo ? data.linkDemo :"",
+  };
+
+  await mutateAsync(transformData);
   };
   return {
     onSubmit,
