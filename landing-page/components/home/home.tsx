@@ -9,6 +9,7 @@ import { ProfileDTO } from "@/types/type";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "@/components/ui/spiner";
 import Link from "next/link";
+import HeroSkeleton from "@/components/skeleton/hero-skeleton";
 
 export default function HomePage() {
 
@@ -23,7 +24,7 @@ export default function HomePage() {
   })
 
   if(isPending){
-    return <Spinner/>
+    return <HeroSkeleton />
   }
 
   return (

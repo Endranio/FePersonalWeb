@@ -3,12 +3,13 @@ import { Button } from "@/components/ui/button";
 
 import Link from "next/link";
 import { FaExternalLinkAlt, FaGithub } from "react-icons/fa";
+import Image from "next/image";
 
 export default function ProjectCard(project: ProjectDTO) {
   return (
     <div className="bg-white dark:bg-gray-900 rounded-xl shadow-md flex flex-col h-full">
       <div className="bg-gray-100 dark:bg-gray-800 flex items-center justify-center h-[200] rounded-t-xl">
-        <img src={project.image} width={400} className="h-full" alt="project" />
+        <Image src={project.image} height={200} width={400} className="h-full" alt="project" />
       </div>
       <div className="flex flex-col gap-8 flex-grow bg-white dark:bg-gray-900 p-10 rounded-b-xl">
         <h1 className="font-bold text-3xl ">{project.title}</h1>

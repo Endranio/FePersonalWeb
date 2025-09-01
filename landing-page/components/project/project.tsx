@@ -5,6 +5,7 @@ import { ProjectDTO } from "@/types/type";
 import { useQuery } from "@tanstack/react-query";
 import ProjectCard from "./project-card";
 import Spinner from "@/components/ui/spiner";
+import ProjectSkeleton from "@/components/skeleton/project-skeleton";
 
 export default  function Project() {
  
@@ -16,10 +17,6 @@ export default  function Project() {
     }
   })
 
-  if(isPending){
-    return<Spinner/>
-  }
-
   return (
     <div id="project">
       <h1 className="text-2xl md:text-3xl font-bold mb-20 pt-15">
@@ -27,11 +24,11 @@ export default  function Project() {
       </h1>
 
       <div className="grid md:grid-cols-2 gap-20 mb-32">
-        {data.map((project: ProjectDTO, index: number) => (
-          <div key={index}>
-            <ProjectCard {...project} />
-          </div>
-        ))}
+       {isPending
+          ? Array.from({ length: 3 }).map((_, i) => <ProjectSkeleton key={i} />)
+          : data.map((project: ProjectDTO, index: number) => (
+              <ProjectCard key={index} {...project} />
+            ))}
       </div>
 
       <div className="flex flex-col items-center space-y-5 ">

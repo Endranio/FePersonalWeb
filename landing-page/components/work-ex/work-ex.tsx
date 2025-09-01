@@ -5,6 +5,7 @@ import WorkCard from "./work-ex-card";
 import { api } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "@/components/ui/spiner";
+import WorkCardSkeleton from "@/components/skeleton/experience-skeleton";
 
 export default function WorkExperience() {
   
@@ -18,20 +19,15 @@ export default function WorkExperience() {
     }
   })
 
-  if(isLoading){
-    return<Spinner/>
-  }
-
   return (
     <div id="work-ex">
       <h1 className="text-2xl md:text-3xl font-bold mb-12 pt-24">
         Work Experiences:
       </h1>
-      {data.map((work: WorkExDTO, i: number) => (
-        <div key={i}>
-          <WorkCard {...work} />
-        </div>
-      ))}
+     {isLoading
+  ? Array.from({ length: 1 }).map((_, i) => <WorkCardSkeleton key={i} />)
+  : data.map((work: WorkExDTO, i: number) => <WorkCard key={i} {...work} />)}
+
     </div>
   );
 }
