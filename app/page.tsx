@@ -10,18 +10,31 @@ import { AppSidebar } from "@/components/ui/app-sidebar";
 
 export default function Home() {
   return (
-    <div className=" relative">
-      <div className="sticky top-0 bg-white z-50 dark:bg-gray-950  w-screen">
-      <AppSidebar />
+    <div className="relative">
+      {/* Fixed Navbar */}
+      <div className="sticky top-0 left-0 right-0 z-50">
+        <AppSidebar />
         <Navbar />
       </div>
-      <div className="w-3/4 mx-auto">
+
+      {/* Spacer for fixed navbar */}
+      <div className="h-[72px]" />
+
+      <div className="max-w-6xl mx-auto px-6 lg:px-8">
         <HomePage />
-        <TechStack />
-        <WorkExperience />
-        <Project />
+        <div className="mt-24">
+          <TechStack />
+        </div>
+        <div className="mt-24">
+          <WorkExperience />
+        </div>
+        <div className="mt-24">
+          <Project />
+        </div>
       </div>
-      <Footer />
+      <div className="mt-32">
+        <Footer />
+      </div>
     </div>
   );
 }
