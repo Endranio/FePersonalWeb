@@ -1,37 +1,58 @@
 import { WorkExDTO } from "@/types/type";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
 
 export default function WorkCard(work: WorkExDTO) {
   return (
-    <div className="sm:flex gap-20 bg-white dark:bg-gray-800 p-10 rounded-xl mt-10 ">
-      <div className="shrink-0 p-3">
-        <img src={work.image} width={100} height={100} alt={"company"} />
-      </div>
+    <div className="relative">
+      {/* Timeline dot */}
+      <div className="timeline-dot" />
 
-      <div className="w-full">
-        <div className="sm:flex sm:justify-between">
-          <div>
-            <h1 className="font-bold text-3xl">{work.position}</h1>
-            <p className="text-green-600">{work.company}</p>
+      {/* Card */}
+      <div className="glass-card rounded-2xl p-8 ml-6">
+        <div className="sm:flex sm:justify-between sm:items-start gap-6">
+          <div className="flex items-start gap-5">
+            {/* Company Logo */}
+            <div className="shrink-0 w-14 h-14 rounded-xl overflow-hidden bg-white dark:bg-white/10 p-2 flex items-center justify-center shadow-sm">
+              <img
+                src={work.image}
+                width={48}
+                height={48}
+                alt={work.company}
+                className="object-contain w-full h-full"
+              />
+            </div>
+
+            <div>
+              <h3 className="font-bold text-xl lg:text-2xl">{work.position}</h3>
+              <p className="text-teal-600 dark:text-teal-400 font-medium text-sm mt-0.5">
+                {work.company}
+              </p>
+            </div>
           </div>
-          <p>{work.startDate} - {work.endDate}</p>
+
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-foreground/5 text-foreground/50 mt-3 sm:mt-0 shrink-0">
+            {work.startDate} — {work.endDate}
+          </span>
         </div>
 
-        {work.jobdesk.map((Item, index) => (
-          <ul className="list-disc list-inside mt-3 space-y-2" key={index}>
-            <li>{Item}</li>
-          </ul>
-        ))}
+        {/* Job descriptions */}
+        <ul className="mt-5 space-y-2 text-foreground/70 text-[15px]">
+          {work.jobdesk.map((item, index) => (
+            <li key={index} className="flex items-start gap-2">
+              <span className="mt-2 w-1.5 h-1.5 rounded-full bg-teal-400 shrink-0" />
+              {item}
+            </li>
+          ))}
+        </ul>
 
-        <div className="flex flex-wrap gap-5 mt-5">
+        {/* Tech tags */}
+        <div className="flex flex-wrap gap-2 mt-5">
           {work.tech.map((item, index) => (
-            <Button
+            <span
               key={index}
-              className="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-transparent text-gray-600 dark:text-gray-400"
+              className="px-3 py-1 text-xs font-medium rounded-full bg-teal-50 dark:bg-teal-950/30 text-teal-700 dark:text-teal-300 border border-teal-200/50 dark:border-teal-700/30"
             >
               {item}
-            </Button>
+            </span>
           ))}
         </div>
       </div>
