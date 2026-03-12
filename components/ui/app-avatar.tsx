@@ -1,12 +1,11 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-
-
-export default function AppAvatar(){
-    return(
-
-        <Avatar>
-        <AvatarImage src="" className="w-5 rounded-full"/>
-        <AvatarFallback className="bg-black text-white p-2 font-bold rounded-lg">EP</AvatarFallback>
-    </Avatar>
-    )
+export default function AppAvatar() {
+    return (
+        <div className="flex items-center gap-2">
+            <div className="flex items-center justify-center backdrop-blur-sm py-1.5 rounded-lg">
+                <span className="font-bold text-2xl tracking-tighter gradient-text">
+                    {"Endra </>"}
+                </span>
+            </div>
+        </div>
+    );
 }

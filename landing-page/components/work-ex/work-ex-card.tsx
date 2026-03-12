@@ -1,10 +1,35 @@
-import { WorkExDTO } from "@/types/type";
+"use client";
 
-export default function WorkCard(work: WorkExDTO) {
+import { WorkExDTO } from "@/types/type";
+import { motion } from "motion/react";
+
+type Props = WorkExDTO & { index?: number };
+
+export default function WorkCard({ index = 0, ...work }: Props) {
   return (
-    <div className="relative">
+    <motion.div
+      className="relative"
+      initial={{ opacity: 0, x: -30 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{
+        duration: 0.6,
+        delay: index * 0.15,
+        ease: [0.16, 1, 0.3, 1],
+      }}
+    >
       {/* Timeline dot */}
-      <div className="timeline-dot" />
+      <motion.div
+        className="timeline-dot"
+        initial={{ scale: 0 }}
+        whileInView={{ scale: 1 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{
+          duration: 0.4,
+          delay: index * 0.15 + 0.2,
+          ease: [0.16, 1, 0.3, 1],
+        }}
+      />
 
       {/* Card */}
       <div className="glass-card rounded-2xl p-8 ml-6">
@@ -56,6 +81,6 @@ export default function WorkCard(work: WorkExDTO) {
           ))}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

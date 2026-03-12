@@ -1,10 +1,25 @@
+"use client";
+
 import { ProjectDTO } from "@/types/type";
 import Link from "next/link";
 import { FaExternalLinkAlt, FaGithub } from "react-icons/fa";
+import { motion } from "motion/react";
 
-export default function ProjectCard(project: ProjectDTO) {
+type Props = ProjectDTO & { index?: number };
+
+export default function ProjectCard({ index = 0, ...project }: Props) {
   return (
-    <div className="glass-card rounded-2xl overflow-hidden flex flex-col h-full group">
+    <motion.div
+      className="glass-card rounded-2xl overflow-hidden flex flex-col h-full group"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{
+        duration: 0.6,
+        delay: index * 0.12,
+        ease: [0.16, 1, 0.3, 1],
+      }}
+    >
       {/* Image container */}
       <div className="relative h-[220px] overflow-hidden bg-foreground/5">
         <img
@@ -75,6 +90,6 @@ export default function ProjectCard(project: ProjectDTO) {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

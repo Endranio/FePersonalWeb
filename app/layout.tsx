@@ -17,6 +17,9 @@ export const metadata: Metadata = {
   title: "Endranio Palupi — Fullstack Developer",
   description:
     "Personal portfolio of Endranio Palupi. Fullstack developer specializing in React, Next.js, TypeScript, and modern web technologies.",
+  icons: {
+    icon: "/Logo.svg",
+  },
 };
 
 export default function RootLayout({

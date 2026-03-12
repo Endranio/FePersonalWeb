@@ -1,30 +1,43 @@
 "use client";
 
-import { api } from "@/lib/api";
 import TechCard from "./tech-card";
 import type { TechStack } from "@/types/type";
-import { useQuery } from "@tanstack/react-query";
-import TechSkeleton from "@/components/skeleton/tech-skeleton";
+import { motion } from "motion/react";
 
-export default function TechStack() {
-  const { data: techList, isPending } = useQuery<TechStack[]>({
-    queryKey: ["techs"],
-    queryFn: async () => {
-      const res = await api.get("/techs");
-      return res.data;
-    },
-  });
+type Props = {
+  techList: TechStack[];
+};
 
+export default function TechStack({ techList }: Props) {
   return (
     <section id="tech-stack" className="scroll-mt-24">
-      <h2 className="section-heading text-2xl md:text-3xl font-bold mb-4">
+      <motion.h2
+        className="section-heading text-2xl md:text-3xl font-bold mb-4"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      >
         <span className="gradient-text-subtle">Tech Stack</span>
-      </h2>
-      <p className="text-foreground/50 mb-10 text-base">
+      </motion.h2>
+      <motion.p
+        className="text-foreground/50 mb-10 text-base"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+      >
         Tools & technologies I work with every day
-      </p>
+      </motion.p>
 
-      {isPending ? <TechSkeleton /> : <TechCard techList={techList} />}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <TechCard techList={techList} />
+      </motion.div>
     </section>
   );
 }

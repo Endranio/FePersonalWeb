@@ -2,40 +2,49 @@
 
 import { WorkExDTO } from "@/types/type";
 import WorkCard from "./work-ex-card";
-import { api } from "@/lib/api";
-import { useQuery } from "@tanstack/react-query";
-import WorkCardSkeleton from "@/components/skeleton/experience-skeleton";
+import { motion } from "motion/react";
 
-export default function WorkExperience() {
-  const { data, isLoading } = useQuery({
-    queryKey: ["work-ex"],
-    queryFn: async () => {
-      const res = await api.get("/experience");
-      return res.data;
-    },
-  });
+type Props = {
+  experiences: WorkExDTO[];
+};
 
+export default function WorkExperience({ experiences }: Props) {
   return (
     <section id="work-ex" className="scroll-mt-24">
-      <h2 className="section-heading text-2xl md:text-3xl font-bold mb-4">
+      <motion.h2
+        className="section-heading text-2xl md:text-3xl font-bold mb-4"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      >
         <span className="gradient-text-subtle">Work Experience</span>
-      </h2>
-      <p className="text-foreground/50 mb-10 text-base">
+      </motion.h2>
+      <motion.p
+        className="text-foreground/50 mb-10 text-base"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+      >
         My professional journey so far
-      </p>
+      </motion.p>
 
       <div className="relative pl-10">
         {/* Timeline vertical line */}
-        <div className="timeline-line" />
+        <motion.div
+          className="timeline-line"
+          initial={{ scaleY: 0 }}
+          whileInView={{ scaleY: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          style={{ transformOrigin: "top" }}
+        />
 
         <div className="space-y-8">
-          {isLoading
-            ? Array.from({ length: 2 }).map((_, i) => (
-              <WorkCardSkeleton key={i} />
-            ))
-            : data.map((work: WorkExDTO, i: number) => (
-              <WorkCard key={i} {...work} />
-            ))}
+          {experiences.map((work, i) => (
+            <WorkCard key={i} index={i} {...work} />
+          ))}
         </div>
       </div>
     </section>

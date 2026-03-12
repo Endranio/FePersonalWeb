@@ -4,25 +4,15 @@ import { Button } from "@/components/ui/button";
 import { IoLocationOutline } from "react-icons/io5";
 import { FaWhatsapp } from "react-icons/fa";
 import { IoMdDownload } from "react-icons/io";
-import { api } from "@/lib/api";
 import { ProfileDTO } from "@/types/type";
-import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import HeroSkeleton from "@/components/skeleton/hero-skeleton";
+import { motion } from "motion/react";
 
-export default function HomePage() {
-  const { data, isPending } = useQuery<ProfileDTO>({
-    queryKey: ["profile"],
-    queryFn: async () => {
-      const res = await api.get("/profile");
-      return res.data;
-    },
-  });
+type Props = {
+  profile: ProfileDTO;
+};
 
-  if (isPending) {
-    return <HeroSkeleton />;
-  }
-
+export default function HomePage({ profile }: Props) {
   return (
     <section className="relative min-h-[85vh] flex items-center">
       {/* Animated Background Blobs */}
@@ -34,11 +24,16 @@ export default function HomePage() {
 
       <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 text-left items-center w-full relative z-10">
         {/* Profile Image */}
-        <div className="shrink-0">
+        <motion.div
+          className="shrink-0"
+          initial={{ opacity: 0, x: -60, scale: 0.95 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        >
           <div className="profile-ring rounded-2xl">
             <div className="w-[280px] h-[280px] lg:w-[350px] lg:h-[350px] rounded-2xl overflow-hidden shadow-2xl shadow-teal-500/10">
               <img
-                src={data?.image}
+                src={profile.image}
                 width={350}
                 height={350}
                 alt="Profile"
@@ -46,49 +41,84 @@ export default function HomePage() {
               />
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Content */}
-        <div className="space-y-6 flex-1 lg:text-left text-center animate-fade-in-up">
+        <motion.div
+          className="space-y-6 flex-1 lg:text-left text-center"
+          initial={{ opacity: 0, x: 60 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        >
           {/* Available Badge */}
-          {data?.available && (
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/40 text-emerald-700 dark:text-emerald-400 text-sm font-medium">
+          {profile.available && (
+            <motion.div
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/40 text-emerald-700 dark:text-emerald-400 text-sm font-medium"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
+            >
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
               </span>
               Available for new projects
-            </div>
+            </motion.div>
           )}
 
           {/* Heading */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
-            <span className="gradient-text">{data?.headers}</span>
-          </h1>
+          <motion.h1
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <span className="gradient-text">{profile.headers}</span>
+          </motion.h1>
 
           {/* Position */}
-          <h2 className="text-xl lg:text-2xl font-semibold text-teal-600 dark:text-teal-400">
-            {data?.position}
-          </h2>
+          <motion.h2
+            className="text-xl lg:text-2xl font-semibold text-teal-600 dark:text-teal-400"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {profile.position}
+          </motion.h2>
 
           {/* Description */}
-          <p className="text-foreground/60 leading-relaxed max-w-xl text-base lg:text-lg whitespace-pre-line">
-            {data?.description}
-          </p>
+          <motion.p
+            className="text-foreground/60 leading-relaxed max-w-xl text-base lg:text-lg whitespace-pre-line"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {profile.description}
+          </motion.p>
 
           {/* Location */}
-          <p className="flex items-center gap-2 text-foreground/50 text-sm justify-center lg:justify-start">
+          <motion.p
+            className="flex items-center gap-2 text-foreground/50 text-sm justify-center lg:justify-start"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.65 }}
+          >
             <IoLocationOutline className="text-teal-500" />
-            {data?.location}
-          </p>
+            {profile.location}
+          </motion.p>
 
           {/* CTA Buttons */}
-          <div className="flex gap-4 justify-center lg:justify-start pt-2">
+          <motion.div
+            className="flex gap-4 justify-center lg:justify-start pt-2"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.75, ease: [0.16, 1, 0.3, 1] }}
+          >
             <Button
               className="bg-green-600 text-white hover:bg-green-500 rounded-full px-6 py-5 text-base cursor-pointer transition-all duration-200 hover:shadow-lg hover:shadow-green-500/20 hover:-translate-y-0.5"
               asChild
             >
-              <a href={`https://wa.me/${data?.whatsapp}`} target="_blank">
+              <a href={`https://wa.me/${profile.whatsapp}`} target="_blank">
                 <FaWhatsapp className="mr-2 text-lg" />
                 Let&apos;s Talk
               </a>
@@ -97,13 +127,13 @@ export default function HomePage() {
               className="btn-gradient rounded-full px-6 py-5 text-base cursor-pointer hover:-translate-y-0.5"
               asChild
             >
-              <Link href={data?.cv || ""} target="_blank" download>
+              <Link href={profile.cv || ""} target="_blank" download>
                 <IoMdDownload className="mr-2 text-lg" />
                 Download CV
               </Link>
             </Button>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );
